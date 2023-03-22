@@ -1,0 +1,91 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Characters {
+  character_key  Int     @id @unique @default(autoincrement())
+  inter          String  @db.VarChar(20)
+  dispo          String  @db.VarChar(20)
+  character      String? @unique @db.VarChar(30)
+  character_img  String? @db.VarChar(100)
+  character_desc String? @db.VarChar(500)
+  test_img       String? @db.VarChar(100)
+  User           User[]
+}
+
+model ContentCategory {
+  category_key   Int              @id @unique @default(autoincrement())
+  category_name  String           @db.VarChar(30)
+  inter          String           @db.VarChar(30)
+  ContentMapping ContentMapping[]
+}
+
+model ContentMapping {
+  content_map_key Int             @id @unique @default(autoincrement())
+  category        Int
+  content         Int
+  ContentCategory ContentCategory @relation(fields: [category], references: [category_key], onDelete: Cascade, map: "category_key")
+  Contents        Contents        @relation(fields: [content], references: [content_key], onDelete: Cascade, map: "content_key")
+}
+
+model Contents {
+  content_key    Int              @id @unique @default(autoincrement())
+  content_title  String           @db.VarChar(30)
+  content_link   String           @db.VarChar(100)
+  content_img    String?          @db.VarChar(100)
+  place          String           @db.VarChar(30)
+  introduction   String           @db.VarChar(200)
+  benefit        String           @db.VarChar(200)
+  usage          String           @db.VarChar(200)
+  start_at       String?          @db.VarChar(10)
+  end_at         String?          @db.VarChar(10)
+  ContentMapping ContentMapping[]
+  Liked          Liked[]
+}
+
+model Items {
+  items_key  Int        @id @unique @default(autoincrement())
+  item_name  String     @db.VarChar(30)
+  item_img   String?    @db.VarChar(100)
+  item_inter String     @db.VarChar(10)
+  UserItem   UserItem[]
+}
+
+model Liked {
+  liked_key Int      @id @unique @default(autoincrement())
+  user      Int
+  content   Int
+  Contents  Contents @relation(fields: [content], references: [content_key], onDelete: Cascade, map: "content_key")
+  User      User     @relation(fields: [user], references: [user_key], onDelete: Cascade, map: "user_key")
+}
+
+model User {
+  user_key       Int         @id @unique @default(autoincrement())
+  user_name      String      @db.VarChar(30)
+  user_age       Int?
+  user_gender    String      @db.VarChar(20)
+  user_phone     String      @unique @db.VarChar(30)
+  user_birth     String      @db.VarChar(30)
+  user_school    String?     @db.VarChar(30)
+  user_character Int?
+  user_password  String?     @db.VarChar(100)
+  user_ocr       String?     @db.VarChar(100)
+  ocr_dir        Boolean?    @default(false)
+  user_benefit   Boolean?    @default(false)
+  Liked          Liked[]
+  Characters     Characters? @relation(fields: [user_character], references: [character_key], onDelete: Cascade, map: "character_key")
+  UserItem       UserItem[]
+}
+
+model UserItem {
+  useritem_key Int   @id @unique @default(autoincrement())
+  user         Int
+  item         Int
+  Items        Items @relation(fields: [item], references: [items_key], onDelete: Cascade, map: "item_key")
+  User         User  @relation(fields: [user], references: [user_key], onDelete: Cascade, map: "user_key")
+}
