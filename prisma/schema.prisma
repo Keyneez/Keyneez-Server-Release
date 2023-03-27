@@ -77,6 +77,8 @@ model User {
   user_ocr       String?     @db.VarChar(100)
   ocr_dir        Boolean?    @default(false)
   user_benefit   Boolean?    @default(false)
+  sns_pk         Int         @unique
+  sns_type       String      @db.VarChar(30)
   Liked          Liked[]
   Characters     Characters? @relation(fields: [user_character], references: [character_key], onDelete: Cascade, map: "character_key")
   UserItem       UserItem[]

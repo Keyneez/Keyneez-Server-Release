@@ -7,4 +7,5 @@ const router: Router = Router();
 router.use("/auth", userRouter);
 router.use("/content", contentRouter);
 
+
 export default router;
