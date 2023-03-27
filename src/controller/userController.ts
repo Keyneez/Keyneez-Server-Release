@@ -1,7 +1,7 @@
 import { Prisma, PrismaClient } from "@prisma/client";
 import axios, { Axios } from "axios";
 import { NextFunction, Request, Response } from "express";
-import { session } from "express-session";
+import session, { Cookie } from "express-session";
 import { env } from "process";
 import { rm, sc } from "../constants";
 import { fail, success } from "../constants/response";
@@ -10,12 +10,8 @@ import contentService from "../service/contentService";
 const prisma = new PrismaClient();
 
 
-interface SessionData {
-    userId: number;
-}
-
 //* 인가 코드 확인
-const authKakao = async (req, res) => {
+const authKakao = async (req: Request, res: Response) => {
     const session = req.session;
     const {code} = req.query;
     const authToken = await axios.post('https://kauth.kakao.com/oauth/token', {}, {
