@@ -5,6 +5,7 @@
 ---
 
 ### ✨ 서비스 핵심 기능 소개
+
 <details>
     <summary>1. 테스트하고, 나만의 젤리 만들기</summary>
     <div markdown="1">
@@ -35,8 +36,8 @@
 ### 🧾 API 명세서 <a href="https://tourmaline-hare-a67.notion.site/13adb25a5eee4d28b7d5affae6ce0e08?v=0ec906cdd52d497d861f469c25bd706a">확인하기</a>
 
 ### 👣 ERD
-<img width="100%" alt="image" src="https://user-images.githubusercontent.com/91242806/212251651-04791fa4-ff9d-43a8-8c7e-02c7d0a61302.png">
 
+<img width="100%" alt="image" src="https://user-images.githubusercontent.com/91242806/212251651-04791fa4-ff9d-43a8-8c7e-02c7d0a61302.png">
 
 ### 🛠 Tech
 
@@ -57,8 +58,7 @@
 - 변수나 함수명은 `camelCase`
 
 - 함수의 경우 동사 + 명사
-    - ex) getInformation()
-    
+  - ex) getInformation()
 - DB 테이블 이름 `PascalCase` / 칼럼(column) 이름은 `snake_case`
 
 - Class / Interface / Type / Namespace / Enum 명은 `PascalCase`
@@ -74,20 +74,17 @@
 <summary>Commit message convention</summary>
 <div markdown="1">
 
-
-| 태그 이름  | 설명                                                                 |
-| ---------- | -------------------------------------------------------------------- |
-| [feat]     | 새로운 기능 구현                                                     |
-| [update]     | 추가 개발 진행                                     |
-| [merge]    | 다른 브랜치를 merge 할 때 사용                                       |
-| [fix]      | 버그, 오류 수정                                                      |
-| [remove]      | 불필요한 코드 삭제                                                   |
-| [rename]   | 파일 이름 변경 시 사용                                               |
-
+| 태그 이름 | 설명                           |
+| --------- | ------------------------------ |
+| [feat]    | 새로운 기능 구현               |
+| [update]  | 추가 개발 진행                 |
+| [merge]   | 다른 브랜치를 merge 할 때 사용 |
+| [fix]     | 버그, 오류 수정                |
+| [remove]  | 불필요한 코드 삭제             |
+| [rename]  | 파일 이름 변경 시 사용         |
 
 </div>
 </details>
-
 
 <details>
 <summary>Git Branch convention</summary>
@@ -201,20 +198,14 @@
       "^.+\\.ts$": "ts-jest"
     },
     "testRegex": "\\.test\\.ts$",
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "json"
-    ]
+    "moduleFileExtensions": ["ts", "tsx", "js", "json"]
   }
 }
-
 ```
 
 ### Server Architecture
-![image](https://user-images.githubusercontent.com/91242806/212323115-12b91514-fdbe-4ef3-aa48-5e6785770935.png)
 
+![image](https://user-images.githubusercontent.com/91242806/212323115-12b91514-fdbe-4ef3-aa48-5e6785770935.png)
 
 ---
 
