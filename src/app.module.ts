@@ -5,6 +5,7 @@ import { LoggerMiddleware } from './global/middlewares/logger.middleware';
 import { ConfigModule } from '@nestjs/config';
 import appConfig from './global/configs/app.config';
 import databaseConfig from './global/configs/database.config';
+import { PrismaModule } from './global/prisma/prisma.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import databaseConfig from './global/configs/database.config';
       load: [appConfig, databaseConfig],
       isGlobal: true,
     }),
+    PrismaModule,
   ],
   controllers: [AppController],
   providers: [AppService],

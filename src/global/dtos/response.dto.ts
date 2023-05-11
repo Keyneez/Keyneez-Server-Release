@@ -2,8 +2,8 @@ import { HttpStatus } from '@nestjs/common';
 import { Exclude } from 'class-transformer';
 
 export class ResponseDto<T> {
-  @Exclude() private status: number;
-  @Exclude() private message: string;
+  private status: number;
+  private message: string;
   @Exclude() private data: T;
 
   constructor(status: number, message: string, data?: T) {
