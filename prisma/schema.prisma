@@ -20,6 +20,7 @@ model ContentMapping {
   content         Int
   ContentCategory ContentCategories @relation(fields: [category], references: [category_pk], onDelete: Cascade, map: "category_pk")
   Contents        Contents        @relation(fields: [content], references: [content_pk], onDelete: Cascade, map: "content_pk")
+  @@index([content, category])
 }
 
 model Contents {
@@ -46,6 +47,7 @@ model Likes {
   content   Int
   Contents  Contents @relation(fields: [content], references: [content_pk], onDelete: Cascade, map: "content_pk")
   User      Users     @relation(fields: [user], references: [user_pk], onDelete: Cascade, map: "user_pk")
+  @@index([user, content])
 }
 
 model Users {
