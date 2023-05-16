@@ -35,8 +35,8 @@ model Contents {
   inquiry        String[]
   price          String[]
   benefit        String[]
-  createdAt        DateTime           @default(now())
-  updatedAt        DateTime           @updatedAt
+  created_at        DateTime           @default(now())
+  updated_at        DateTime           @updatedAt
   ContentMapping ContentMapping[]
   Likes          Likes[]
 }
@@ -58,7 +58,7 @@ model Users {
   phone   String   @unique @db.VarChar(30)
   birth   String   @db.VarChar(30)
   sns_type     String   @db.VarChar(30)
-  createdAt        DateTime           @default(now())
-  updatedAt        DateTime           @updatedAt
+  created_at        DateTime           @default(now())
+  updated_at        DateTime           @updatedAt
   Likes        Likes[]
 }
