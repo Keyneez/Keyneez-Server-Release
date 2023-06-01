@@ -19,14 +19,15 @@ model Tags {
   tag               String            @unique @db.VarChar(30)
   category_fk       Int
   ContentCategories ContentCategories @relation(fields: [category_fk], references: [category_pk], onDelete: Cascade, map: "category_fk")
+  UserTags          UserTags[]
 }
 
 model ContentMapping {
-  content_map_pk  Int               @id @unique @default(autoincrement())
-  category        Int
-  content         Int
+  content_map_pk    Int               @id @unique @default(autoincrement())
+  category          Int
+  content           Int
   ContentCategories ContentCategories @relation(fields: [category], references: [category_pk], onDelete: Cascade, map: "category_fk")
-  Contents        Contents          @relation(fields: [content], references: [content_pk], onDelete: Cascade, map: "content_fk")
+  Contents          Contents          @relation(fields: [content], references: [content_pk], onDelete: Cascade, map: "content_fk")
 
   @@unique([content, category], name: "content_category")
   @@index([content, category])
@@ -55,21 +56,36 @@ model Likes {
   user     Int
   content  Int
   Contents Contents @relation(fields: [content], references: [content_pk], onDelete: Cascade, map: "content_fk")
-  Users     Users    @relation(fields: [user], references: [user_pk], onDelete: Cascade, map: "user_fk")
+  Users    Users    @relation(fields: [user], references: [user_pk], onDelete: Cascade, map: "user_fk")
 
   @@unique([user, content], name: "likes_userid")
   @@index([user, content])
 }
 
 model Users {
-  user_pk    Int      @id @unique @default(autoincrement())
-  name       String   @db.VarChar(30)
+  user_pk    Int        @id @unique @default(autoincrement())
+  name       String     @db.VarChar(30)
+  nickname   String     @db.VarChar(6)
+  sns_id     BigInt
   age        Int
-  gender     String   @db.VarChar(20)
-  phone      String   @unique @db.VarChar(30)
-  birth      String   @db.VarChar(30)
-  sns_type   String   @db.VarChar(30)
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  gender     String     @db.VarChar(20)
+  phone      String     @unique @db.VarChar(30)
+  birth      String     @db.VarChar(30)
+  sns_type   String     @db.VarChar(30)
+  created_at DateTime   @default(now())
+  updated_at DateTime   @updatedAt
   Likes      Likes[]
+  UserTags   UserTags[]
+
+  @@unique([sns_id, sns_type], name: "sns_identifer")
+}
+
+model UserTags {
+  user_tag_pk Int   @id @default(autoincrement())
+  user_fk     Int
+  tag_fk      Int
+  Users       Users @relation(fields: [user_fk], references: [user_pk])
+  Tags        Tags  @relation(fields: [tag_fk], references: [tag_pk])
+
+  @@unique([user_fk, tag_fk], name: "users_tags")
 }
