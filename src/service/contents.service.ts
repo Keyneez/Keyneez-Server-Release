@@ -55,7 +55,7 @@ export class ContentsService {
         ],
       },
     });
-    if (!contents) {
+    if (!contents[0]) {
       throw new NotFoundException(
         'Not found contents including keyword: ' + keyword,
       );
