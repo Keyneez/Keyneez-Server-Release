@@ -68,7 +68,7 @@ model Users {
   nickname   String     @db.VarChar(6)
   sns_id     BigInt
   age        Int
-  gender     String     @db.VarChar(20)
+  gender     String     @db.Char(1)
   phone      String     @unique @db.VarChar(30)
   birth      String     @db.VarChar(30)
   sns_type   String     @db.VarChar(30)
