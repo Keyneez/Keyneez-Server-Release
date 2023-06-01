@@ -1,6 +1,6 @@
 import { ContentsRequestDto } from './../dto/contents/contents-request.dto';
 import { ContentsResponseDto } from './../dto/contents/contents-response.dto';
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from './../global/prisma/prima.service';
 
 export enum Filter {
@@ -55,6 +55,11 @@ export class ContentsService {
         ],
       },
     });
+    if (!contents) {
+      throw new NotFoundException(
+        'Not found contents including keyword: ' + keyword,
+      );
+    }
     return contents;
   }
 
