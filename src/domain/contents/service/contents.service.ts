@@ -1,6 +1,6 @@
-import { ContentsRepository } from '../../repository/contents/contents.repository';
-import { GetContentsRequestDto } from '../../../../dto/contents/contents-request.dto';
-import { ContentsResponseDto } from '../../../../dto/contents/contents-response.dto';
+import { ContentsRepository } from '../repository/contents.repository';
+import { GetContentsRequestDto } from '../../../dto/contents/contents-request.dto';
+import { ContentsResponseDto } from '../../../dto/contents/contents-response.dto';
 import { Injectable, NotFoundException } from '@nestjs/common';
 
 @Injectable()
