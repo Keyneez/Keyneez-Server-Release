@@ -1,7 +1,7 @@
-import { ContentsRequestDto } from './../dto/contents/contents-request.dto';
-import { ContentsResponseDto } from './../dto/contents/contents-response.dto';
+import { GetContentsRequestDto } from '../../dto/contents/contents-request.dto';
+import { ContentsResponseDto } from '../../dto/contents/contents-response.dto';
 import { Controller, Get, Param, Query } from '@nestjs/common';
-import { ContentsService } from 'src/service/contents.service';
+import { ContentsService } from 'src/service/contents/contents.service';
 import {
   GetContentDetailDocs,
   GetContentsDocs,
@@ -15,7 +15,7 @@ export class ContentsController {
   @Get('')
   @GetContentsDocs()
   async getContents(
-    @Query() contentsRequestDto: ContentsRequestDto,
+    @Query() contentsRequestDto: GetContentsRequestDto,
   ): Promise<ContentsResponseDto[]> {
     return this.contentsService.getContents(contentsRequestDto);
   }
@@ -28,11 +28,11 @@ export class ContentsController {
     return this.contentsService.searchByKeyword(keyword);
   }
 
-  @Get('/:id')
+  @Get('/:pk')
   @GetContentDetailDocs()
   async getContentDetail(
-    @Param('id') id: number,
+    @Param('pk') pk: number,
   ): Promise<ContentsResponseDto> {
-    return this.contentsService.getContentDetail(+id);
+    return this.contentsService.getContentDetail(+pk);
   }
 }
