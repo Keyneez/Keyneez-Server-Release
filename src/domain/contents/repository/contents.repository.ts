@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ContentCategories } from '@prisma/client';
-import { ContentsResponseDto } from 'src/dto/contents/contents-response.dto';
+import { ContentsResponseDto } from 'src/domain/contents/dtos/contents-response.dto';
 import { PrismaService } from 'src/global/prisma/prima.service';
 
 @Injectable()

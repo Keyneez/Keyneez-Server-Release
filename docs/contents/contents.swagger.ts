@@ -7,7 +7,7 @@ import {
   ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
-import { ContentsResponseDto } from 'src/dto/contents/contents-response.dto';
+import { ContentsResponseDto } from 'src/domain/contents/dtos/contents-response.dto';
 
 export function GetContentsDocs() {
   return applyDecorators(
