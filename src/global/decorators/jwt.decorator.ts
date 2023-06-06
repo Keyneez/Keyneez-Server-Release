@@ -6,3 +6,7 @@ export const User = createParamDecorator(
     return request.user;
   },
 );
+
+export interface JwtAuthUser {
+  userPk: number;
+}

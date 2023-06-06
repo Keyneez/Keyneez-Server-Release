@@ -1,9 +1,6 @@
 import { Controller, Get, HttpStatus, UseGuards } from '@nestjs/common';
-import {
-  AccessTokenGuard,
-  JwtAuthUser,
-} from 'src/domain/auth/guard/access-token.guard';
-import { User } from 'src/global/decorators/jwt.decorator';
+import { AccessTokenGuard } from 'src/domain/auth/guard/access-token.guard';
+import { JwtAuthUser, User } from 'src/global/decorators/jwt.decorator';
 import { UserService } from '../service/user.service';
 import { ResponseDto } from 'src/global/dtos/response.dto';
 

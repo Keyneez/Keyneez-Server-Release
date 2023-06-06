@@ -7,10 +7,6 @@ import {
 import { JwtUtils } from '../jwt/jwt.utils';
 import { Request } from 'express';
 
-export interface JwtAuthUser {
-  userPk: number;
-}
-
 @Injectable()
 export class AccessTokenGuard implements CanActivate {
   constructor(private jwtUtil: JwtUtils) {}
