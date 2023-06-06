@@ -9,6 +9,7 @@ import { PrismaModule } from './global/prisma/prisma.module';
 import { AuthModule } from './domain/auth/auth.module';
 import jwtConfig from './global/configs/jwt.config';
 import oauthConfig from './global/configs/oauth.config';
+import { UserModule } from './domain/user/user.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import oauthConfig from './global/configs/oauth.config';
     }),
     PrismaModule,
     AuthModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService],

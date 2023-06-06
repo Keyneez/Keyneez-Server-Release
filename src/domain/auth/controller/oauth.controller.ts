@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpStatus, Post } from '@nestjs/common';
+import { Body, Controller, HttpStatus, Post } from '@nestjs/common';
 import { ResponseDto } from 'src/global/dtos/response.dto';
 import { OAuthLoginRequestDto } from '../dto/oauth-login.requst.dto';
 import { OAuthService } from '../service/oauth.service';

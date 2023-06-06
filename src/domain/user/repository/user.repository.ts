@@ -29,6 +29,14 @@ export class UserRepository {
     });
   }
 
+  async findByPk(pk: number) {
+    return await this.prisma.users.findUnique({
+      where: {
+        user_pk: pk,
+      },
+    });
+  }
+
   async create(
     oauthUser: OAuthUserTypeDto,
     nickname: string,

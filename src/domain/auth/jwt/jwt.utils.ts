@@ -1,4 +1,9 @@
-import { BadRequestException, Inject, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Inject,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { ConfigType } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { Users } from '@prisma/client';
@@ -35,7 +40,7 @@ export class JwtUtils {
     } catch (e) {
       console.error(e);
       if (e instanceof TokenExpiredError) {
-        throw new BadRequestException('만료된 token');
+        throw new UnauthorizedException('만료된 token');
       }
       throw new BadRequestException('token 에러');
     }
@@ -61,7 +66,18 @@ export class JwtUtils {
     };
   }
 
-  async verifyAccessToken(token: string) {}
+  async verifyAccessToken(token: string) {
+    try {
+      return await this.jwtService.verifyAsync(token, {
+        secret: this.config.accessTokenSecret,
+      });
+    } catch (e) {
+      if (e instanceof TokenExpiredError) {
+        throw new UnauthorizedException('만료된 token');
+      }
+      throw new BadRequestException('token 에러');
+    }
+  }
 
   async verifyRefreshToken(refreshToken: string) {}
 
