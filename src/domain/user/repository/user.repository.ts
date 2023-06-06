@@ -28,4 +28,28 @@ export class UserRepository {
       },
     });
   }
+
+  async create(
+    oauthUser: OAuthUserTypeDto,
+    nickname: string,
+    name: string,
+    email: string,
+    age: number,
+    gender: string,
+    birth: string,
+  ) {
+    return await this.prisma.users.create({
+      data: {
+        sns_id: oauthUser.snsId,
+        sns_type: oauthUser.snsType,
+        name,
+        nickname,
+        email,
+        age,
+        gender,
+        phone: '이거미정',
+        birth,
+      },
+    });
+  }
 }

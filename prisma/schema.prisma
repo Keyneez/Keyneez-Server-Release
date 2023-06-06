@@ -66,6 +66,7 @@ model Users {
   user_pk       Int        @id @unique @default(autoincrement())
   name          String     @db.VarChar(30)
   nickname      String     @db.VarChar(6)
+  email         String     @db.VarChar(30)
   sns_id        String
   age           Int
   gender        String     @db.Char(1)

@@ -70,8 +70,6 @@ export class SnsProvider {
         Authorization: `Bearer ${accessToken}`,
       },
     });
-    console.log(response);
-    console.log(response.data);
     return response.data;
   }
 }

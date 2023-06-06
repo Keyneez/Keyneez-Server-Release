@@ -1,14 +1,16 @@
+import { Users } from '@prisma/client';
 import { Token } from '../jwt/jwt.utils';
+import { UserInfoResponseDto } from 'src/domain/user/dto/user-info.response.dto';
 
 export class OAuthLoginResponseDto {
   isNewUser: boolean;
   token: Token;
-  user?: any;
+  user?: UserInfoResponseDto;
 
-  constructor(isNewUser: boolean, token?: Token, user?: any) {
+  constructor(isNewUser: boolean, token?: Token, user?: Users) {
     this.isNewUser = isNewUser;
     this.token = token;
-    this.user = user;
+    this.user = new UserInfoResponseDto(user);
   }
 
   static newUser() {
