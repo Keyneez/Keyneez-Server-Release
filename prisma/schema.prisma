@@ -63,19 +63,20 @@ model Likes {
 }
 
 model Users {
-  user_pk    Int        @id @unique @default(autoincrement())
-  name       String     @db.VarChar(30)
-  nickname   String     @db.VarChar(6)
-  sns_id     BigInt
-  age        Int
-  gender     String     @db.Char(1)
-  phone      String     @unique @db.VarChar(30)
-  birth      String     @db.VarChar(30)
-  sns_type   String     @db.VarChar(30)
-  created_at DateTime   @default(now())
-  updated_at DateTime   @updatedAt
-  Likes      Likes[]
-  UserTags   UserTags[]
+  user_pk       Int        @id @unique @default(autoincrement())
+  name          String     @db.VarChar(30)
+  nickname      String     @db.VarChar(6)
+  sns_id        String
+  age           Int
+  gender        String     @db.Char(1)
+  phone         String     @unique @db.VarChar(30)
+  refresh_token String?    @db.VarChar(200)
+  birth         String     @db.VarChar(30)
+  sns_type      String     @db.VarChar(30)
+  created_at    DateTime   @default(now())
+  updated_at    DateTime   @updatedAt
+  Likes         Likes[]
+  UserTags      UserTags[]
 
   @@unique([sns_id, sns_type], name: "sns_identifer")
 }
