@@ -1,3 +1,4 @@
+import { CategoryFilter } from './../dtos/contents-request.dto';
 import { Injectable } from '@nestjs/common';
 import { ContentCategories } from '@prisma/client';
 import { ContentsResponseDto } from 'src/domain/contents/dtos/contents-response.dto';
@@ -17,13 +18,10 @@ export class ContentsRepository {
     return category;
   }
 
-  async getFilteredContents(filter: ContentCategories) {
-    const contents = await this.prisma.contentMapping.findMany({
+  async getFilteredContents(filter: CategoryFilter) {
+    const contents = await this.prisma.contents.findMany({
       where: {
-        category: filter.category_pk,
-      },
-      include: {
-        Contents: true,
+        category: filter,
       },
     });
     return contents;

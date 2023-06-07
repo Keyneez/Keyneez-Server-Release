@@ -8,46 +8,39 @@ datasource db {
 }
 
 model ContentCategories {
-  category_pk    Int              @id @unique @default(autoincrement())
-  category       String           @unique @db.VarChar(30)
-  ContentMapping ContentMapping[]
-  Tags           Tags[]
+  category_pk Int        @id @unique @default(autoincrement())
+  category    String     @unique @db.VarChar(30)
+  Contents    Contents[]
+  Tags        Tags[]
 }
 
 model Tags {
   tag_pk            Int               @id @unique @default(autoincrement())
   tag               String            @unique @db.VarChar(30)
-  category_fk       Int
-  ContentCategories ContentCategories @relation(fields: [category_fk], references: [category_pk], onDelete: Cascade, map: "category_fk")
-}
-
-model ContentMapping {
-  content_map_pk    Int               @id @unique @default(autoincrement())
-  category          Int
-  content           Int
-  ContentCategories ContentCategories @relation(fields: [category], references: [category_pk], onDelete: Cascade, map: "category_fk")
-  Contents          Contents          @relation(fields: [content], references: [content_pk], onDelete: Cascade, map: "content_fk")
-
-  @@unique([content, category], name: "content_category")
-  @@index([content, category])
+  category_fk       String            @db.VarChar(30)
+  Contents          Contents[]
+  ContentCategories ContentCategories @relation(fields: [category_fk], references: [category], onDelete: Cascade, map: "category_fk")
 }
 
 model Contents {
-  content_pk     Int              @id @unique @default(autoincrement())
-  title          String           @db.VarChar(30)
-  link           String           @db.VarChar(100)
-  img            String           @db.VarChar(100)
-  place          String           @db.VarChar(30)
-  introduction   String           @db.VarChar(200)
-  start_at       String?          @db.VarChar(10)
-  end_at         String?          @db.VarChar(10)
-  inquiry        String[]
-  price          String[]
-  benefit        String[]
-  created_at     DateTime         @default(now())
-  updated_at     DateTime         @updatedAt
-  ContentMapping ContentMapping[]
-  Likes          Likes[]
+  content_pk        Int               @id @unique @default(autoincrement())
+  category          String            @db.VarChar(30)
+  tag               String            @db.VarChar(30)
+  title             String            @db.VarChar(30)
+  link              String            @db.VarChar(100)
+  img               String            @db.VarChar(100)
+  place             String            @db.VarChar(30)
+  introduction      String            @db.VarChar(200)
+  start_at          String?           @db.VarChar(10)
+  end_at            String?           @db.VarChar(10)
+  inquiry           String[]
+  price             String[]
+  benefit           String[]
+  created_at        DateTime          @default(now())
+  updated_at        DateTime          @updatedAt
+  ContentCategories ContentCategories @relation(fields: [category], references: [category], onDelete: Cascade, map: "category_fk")
+  Tags              Tags              @relation(fields: [tag], references: [tag], onDelete: Cascade, map: "tag_fk")
+  Likes             Likes[]
 }
 
 model Likes {

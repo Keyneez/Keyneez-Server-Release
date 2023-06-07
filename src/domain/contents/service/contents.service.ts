@@ -11,15 +11,10 @@ export class ContentsService {
     contentsRequestDto: GetContentsRequestDto,
   ): Promise<ContentsResponseDto[]> {
     if (contentsRequestDto.filter) {
-      const filter = await this.contentsRepository.findCategoryPk(
+      const contents = await this.contentsRepository.getFilteredContents(
         contentsRequestDto.filter,
       );
-
-      const contents = await this.contentsRepository.getFilteredContents(
-        filter,
-      );
-      const data = contents.map((content) => content.Contents);
-      return data;
+      return contents;
     }
 
     return await this.contentsRepository.getAllContents();
