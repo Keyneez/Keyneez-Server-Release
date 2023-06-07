@@ -30,7 +30,14 @@ export class OAuthService {
   }
 
   async kakaoOauthSignup(dto: OAuthSignUpRequestDto) {
-    const { idToken, accessToken, nickname, age, birth, gender } = dto;
+    const {
+      id_token: idToken,
+      access_token: accessToken,
+      nickname,
+      age,
+      birth,
+      gender,
+    } = dto;
     const oauthUser = await this.snsProvider.kakaoIdTokenVerify(idToken);
     const findUser = await this.userRepository.findByOAuthUserType(oauthUser);
     if (findUser) {

@@ -22,7 +22,7 @@ export class AuthController {
   async refresh(@User() user: JwtAuthUser, @Body() dto: RefreshRequestDto) {
     const result = await this.authService.refresh(
       user.userPk,
-      dto.refreshToken,
+      dto.refresh_token,
     );
     return ResponseDto.okWithData(HttpStatus.OK, '재발급 성공', result);
   }

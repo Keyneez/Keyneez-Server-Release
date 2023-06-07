@@ -1,6 +1,6 @@
 export class OAuthSignUpRequestDto {
-  idToken: string;
-  accessToken: string;
+  id_token: string;
+  access_token: string;
   nickname: string;
   gender: string;
   birth: string;

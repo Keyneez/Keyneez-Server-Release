@@ -3,12 +3,12 @@ import { Token } from '../service/token.service';
 import { UserInfoResponseDto } from 'src/domain/user/dto/user-info.response.dto';
 
 export class OAuthLoginResponseDto {
-  isNewUser: boolean;
+  is_new_user: boolean;
   token?: Token;
   user?: UserInfoResponseDto;
 
   constructor(isNewUser: boolean, token?: Token, user?: Users) {
-    this.isNewUser = isNewUser;
+    this.is_new_user = isNewUser;
     this.token = token;
     this.user = user ? new UserInfoResponseDto(user) : null;
   }

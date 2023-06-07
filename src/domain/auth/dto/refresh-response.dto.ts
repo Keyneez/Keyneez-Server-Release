@@ -1,7 +1,7 @@
 export class RefreshResponseDto {
-  readonly accessToken: string;
+  readonly access_token: string;
 
   constructor(token: string) {
-    this.accessToken = token;
+    this.access_token = token;
   }
 }
