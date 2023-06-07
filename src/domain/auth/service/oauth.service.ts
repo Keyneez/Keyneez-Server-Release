@@ -1,6 +1,6 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import { SnsProvider } from './sns.provider';
-import { JwtUtils } from '../jwt/jwt.utils';
+import { TokenService } from './token.service';
 import { UserRepository } from 'src/domain/user/repository/user.repository';
 import { OAuthLoginResponseDto } from '../dto/oauth-login.response.dto';
 import { OAuthSignUpRequestDto } from '../dto/oauth-signup.request.dto';
@@ -10,7 +10,7 @@ import { OAuthSignUpResponseDto } from '../dto/oauth-signup.response.dto';
 export class OAuthService {
   constructor(
     private snsProvider: SnsProvider,
-    private jwtUtils: JwtUtils,
+    private tokenService: TokenService,
     private userRepository: UserRepository,
   ) {}
 
@@ -19,7 +19,7 @@ export class OAuthService {
 
     const findUser = await this.userRepository.findByOAuthUserType(oauthUser);
     if (findUser) {
-      const token = await this.jwtUtils.generateToken(findUser);
+      const token = await this.tokenService.generateToken(findUser);
       await this.userRepository.updateRefreshToken(
         findUser.user_pk,
         token.refreshToken,
@@ -50,7 +50,7 @@ export class OAuthService {
       birth,
     );
 
-    const token = await this.jwtUtils.generateToken(user);
+    const token = await this.tokenService.generateToken(user);
     await this.userRepository.updateRefreshToken(
       user.user_pk,
       token.refreshToken,

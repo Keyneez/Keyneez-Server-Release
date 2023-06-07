@@ -1,5 +1,5 @@
 import { UserInfoResponseDto } from 'src/domain/user/dto/user-info.response.dto';
-import { Token } from '../jwt/jwt.utils';
+import { Token } from '../service/token.service';
 import { Users } from '@prisma/client';
 
 export class OAuthSignUpResponseDto {

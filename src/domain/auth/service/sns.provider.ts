@@ -3,7 +3,7 @@ import { HttpService } from '@nestjs/axios';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
 import { OidcPublicKeyDto } from '../dto/oidc.public-key.dto';
-import { JwtUtils } from '../jwt/jwt.utils';
+import { TokenService } from './token.service';
 import { OAuthUserTypeDto } from '../dto/oauth-user-type.dto';
 import oauthConfig from 'src/global/configs/oauth.config';
 import { ConfigType } from '@nestjs/config';
@@ -13,7 +13,7 @@ export class SnsProvider {
   constructor(
     private readonly httpService: HttpService,
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
-    private jwtUtil: JwtUtils,
+    private tokenService: TokenService,
     @Inject(oauthConfig.KEY) private config: ConfigType<typeof oauthConfig>,
   ) {}
   private KAKAO_PUBLIC_KEY_URL =
@@ -22,10 +22,10 @@ export class SnsProvider {
   async kakaoIdTokenVerify(token: string): Promise<OAuthUserTypeDto> {
     const KAKAO_ISSURE = 'https://kauth.kakao.com';
     const KAKAO_AUD = this.config.kakaoClientId;
-    const kid = this.jwtUtil.getKidFromIdToken(token);
+    const kid = this.tokenService.getKidFromIdToken(token);
     const PUBLICK_KEY = await this.getKakaoPublicKey(kid);
 
-    const payload = await this.jwtUtil.idTokenVerify(
+    const payload = await this.tokenService.idTokenVerify(
       token,
       KAKAO_AUD,
       KAKAO_ISSURE,

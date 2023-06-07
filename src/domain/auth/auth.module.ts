@@ -1,7 +1,7 @@
 import { Global, Module } from '@nestjs/common';
 import { OAuthController } from './controller/oauth.controller';
 import { OAuthService } from './service/oauth.service';
-import { JwtUtils } from './jwt/jwt.utils';
+import { TokenService } from './service/token.service';
 import { SnsProvider } from './service/sns.provider';
 import { HttpModule } from '@nestjs/axios';
 import { CacheModule } from '@nestjs/cache-manager';
@@ -15,11 +15,11 @@ import { AccessTokenGuard } from './guard/access-token.guard';
   controllers: [OAuthController],
   providers: [
     OAuthService,
-    JwtUtils,
+    TokenService,
     SnsProvider,
     UserRepository,
     AccessTokenGuard,
   ],
-  exports: [JwtUtils],
+  exports: [TokenService],
 })
 export class AuthModule {}

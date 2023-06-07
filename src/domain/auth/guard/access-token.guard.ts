@@ -4,12 +4,12 @@ import {
   ExecutionContext,
   Injectable,
 } from '@nestjs/common';
-import { JwtUtils } from '../jwt/jwt.utils';
+import { TokenService } from '../service/token.service';
 import { Request } from 'express';
 
 @Injectable()
 export class AccessTokenGuard implements CanActivate {
-  constructor(private jwtUtil: JwtUtils) {}
+  constructor(private tokenService: TokenService) {}
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
 
@@ -18,7 +18,7 @@ export class AccessTokenGuard implements CanActivate {
       throw new BadRequestException('token이 필요합니다.');
     }
 
-    const payload = await this.jwtUtil.verifyAccessToken(accessToken);
+    const payload = await this.tokenService.verifyAccessToken(accessToken);
     request['user'] = {
       userPk: Number.parseInt(payload.sub),
     };

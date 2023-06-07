@@ -17,7 +17,7 @@ export interface Token {
 }
 
 @Injectable()
-export class JwtUtils {
+export class TokenService {
   constructor(
     private jwtService: JwtService,
     @Inject(jwtConfig.KEY) private config: ConfigType<typeof jwtConfig>,
