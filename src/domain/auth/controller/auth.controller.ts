@@ -12,6 +12,7 @@ import { AuthService } from '../service/auth.service';
 import { RefreshRequestDto } from '../dto/refresh-request.dto';
 import { ResponseDto } from 'src/global/dtos/response.dto';
 import { AccessTokenGuard } from '../guard/access-token.guard';
+import { LogOutDocs, RefreshDocs } from 'docs/auth/auth.swagger';
 
 @Controller('/api')
 export class AuthController {
@@ -19,6 +20,7 @@ export class AuthController {
 
   @Post('/auth/refresh')
   @UseGuards(RefreshTokenGuard)
+  @RefreshDocs()
   async refresh(@User() user: JwtAuthUser, @Body() dto: RefreshRequestDto) {
     const result = await this.authService.refresh(
       user.userPk,
@@ -29,6 +31,7 @@ export class AuthController {
 
   @Get('/auth/logout')
   @UseGuards(AccessTokenGuard)
+  @LogOutDocs()
   async logout(@User() user: JwtAuthUser) {
     await this.authService.logout(user.userPk);
     return ResponseDto.ok(HttpStatus.OK, '로그아웃 성공');
