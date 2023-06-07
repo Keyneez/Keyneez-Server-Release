@@ -5,7 +5,6 @@ import {
   Injectable,
 } from '@nestjs/common';
 import { TokenService } from '../service/token.service';
-import { Observable } from 'rxjs';
 import { Request } from 'express';
 
 @Injectable()

@@ -3,7 +3,6 @@ import { ResponseDto } from 'src/global/dtos/response.dto';
 import { OAuthLoginRequestDto } from '../dto/oauth-login.requst.dto';
 import { OAuthService } from '../service/oauth.service';
 import { OAuthSignUpRequestDto } from '../dto/oauth-signup.request.dto';
-import { JwtAuthUser, User } from 'src/global/decorators/jwt.decorator';
 
 @Controller('/api')
 export class OAuthController {
