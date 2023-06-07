@@ -35,6 +35,14 @@ export class AuthService {
     return new RefreshResponseDto(newAccessToken);
   }
 
+  async logout(userPk: number) {
+    const user = await this.userRepository.findByPk(userPk);
+    if (!user) {
+      throw new NotFoundException('해당 유저를 찾을 수 없습니다.');
+    }
+    await this.userRepository.updateRefreshToken(userPk, null);
+  }
+
   private isEqualRefreshToken(user: Users, inputRefreshToken: string): boolean {
     return user.refresh_token == inputRefreshToken;
   }
