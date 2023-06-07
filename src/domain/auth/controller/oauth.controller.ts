@@ -11,6 +11,7 @@ export class OAuthController {
   @Post('/oauth/kakao')
   async kakaoLogin(@Body() requestBody: OAuthLoginRequestDto) {
     const { idToken } = requestBody;
+    console.log(idToken);
     const result = await this.oauthService.oauthKakaoLogin(idToken);
     return ResponseDto.okWithData(HttpStatus.OK, 'OAuth Login', result);
   }

@@ -55,7 +55,6 @@ export class UserRepository {
         email,
         age,
         gender,
-        phone: '이거미정',
         birth,
       },
     });

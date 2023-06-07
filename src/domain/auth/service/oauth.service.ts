@@ -38,6 +38,8 @@ export class OAuthService {
     }
 
     const userInfo = await this.snsProvider.getKakaoUserInfo(accessToken);
+
+    // 아직 동의 항목이 추가 안돼서 구현X
     const name = '이름';
     const email = userInfo.email;
     const user = await this.userRepository.create(

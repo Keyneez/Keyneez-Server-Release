@@ -70,7 +70,6 @@ model Users {
   sns_id        String
   age           Int
   gender        String     @db.Char(1)
-  phone         String     @unique @db.VarChar(30)
   refresh_token String?    @db.VarChar(200)
   birth         String     @db.VarChar(30)
   sns_type      String     @db.VarChar(30)
