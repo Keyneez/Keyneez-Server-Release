@@ -79,9 +79,29 @@ export class TokenService {
     }
   }
 
-  async verifyRefreshToken(refreshToken: string) {}
+  async verifyRefreshToken(refreshToken: string) {
+    try {
+      await this.jwtService.verifyAsync(refreshToken, {
+        secret: this.config.refreshTokenSecret,
+      });
+    } catch (e) {
+      if (e instanceof TokenExpiredError) {
+        throw new UnauthorizedException('만료된 token');
+      }
+      throw new BadRequestException('token 에러');
+    }
+  }
 
-  async verifyAccessTokenNotExpireCheck() {}
+  async verifyAccessTokenNotExpireCheck(token: string) {
+    try {
+      return await this.jwtService.verifyAsync(token, {
+        secret: this.config.accessTokenSecret,
+        ignoreExpiration: true,
+      });
+    } catch (e) {
+      throw new BadRequestException('token 에러');
+    }
+  }
 
   async generateAccessToken(user: Users) {
     const payload = {

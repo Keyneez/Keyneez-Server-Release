@@ -8,17 +8,22 @@ import { CacheModule } from '@nestjs/cache-manager';
 import { UserRepository } from '../user/repository/user.repository';
 import { JwtModule } from '@nestjs/jwt';
 import { AccessTokenGuard } from './guard/access-token.guard';
+import { RefreshTokenGuard } from './guard/refresh-token.guard';
+import { AuthController } from './controller/auth.controller';
+import { AuthService } from './service/auth.service';
 
 @Global()
 @Module({
   imports: [HttpModule, CacheModule.register(), JwtModule.register({})],
-  controllers: [OAuthController],
+  controllers: [OAuthController, AuthController],
   providers: [
     OAuthService,
     TokenService,
     SnsProvider,
     UserRepository,
     AccessTokenGuard,
+    RefreshTokenGuard,
+    AuthService,
   ],
   exports: [TokenService],
 })
