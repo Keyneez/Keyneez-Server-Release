@@ -8,11 +8,11 @@ import {
   OAuthKakaoSignUpDocs,
 } from 'docs/auth/oauth.swagger';
 
-@Controller('/api')
+@Controller('/api/oauth')
 export class OAuthController {
   constructor(private oauthService: OAuthService) {}
 
-  @Post('/oauth/kakao')
+  @Post('/kakao')
   @OAuthKakaoLoginDocs()
   async kakaoLogin(@Body() requestBody: OAuthLoginRequestDto) {
     const { id_token: idToken } = requestBody;
@@ -20,7 +20,7 @@ export class OAuthController {
     return ResponseDto.okWithData(HttpStatus.OK, 'OAuth Login', result);
   }
 
-  @Post('/oauth/kakao/sign-up')
+  @Post('/kakao/sign-up')
   @OAuthKakaoSignUpDocs()
   async kakaoSignUp(@Body() requestBody: OAuthSignUpRequestDto) {
     const result = await this.oauthService.kakaoOauthSignup(requestBody);

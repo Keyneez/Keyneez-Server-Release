@@ -14,11 +14,11 @@ import { ResponseDto } from 'src/global/dtos/response.dto';
 import { AccessTokenGuard } from '../guard/access-token.guard';
 import { LogOutDocs, RefreshDocs } from 'docs/auth/auth.swagger';
 
-@Controller('/api')
+@Controller('/api/auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
-  @Post('/auth/refresh')
+  @Post('/refresh')
   @UseGuards(RefreshTokenGuard)
   @RefreshDocs()
   async refresh(@User() user: JwtAuthUser, @Body() dto: RefreshRequestDto) {
@@ -29,7 +29,7 @@ export class AuthController {
     return ResponseDto.okWithData(HttpStatus.OK, '재발급 성공', result);
   }
 
-  @Get('/auth/logout')
+  @Get('/logout')
   @UseGuards(AccessTokenGuard)
   @LogOutDocs()
   async logout(@User() user: JwtAuthUser) {
