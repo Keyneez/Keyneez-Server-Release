@@ -15,7 +15,7 @@ export class AccessTokenGuard implements CanActivate {
 
     const accessToken = this.extractTokenFromHeader(request);
     if (!accessToken) {
-      throw new BadRequestException('token이 필요합니다.');
+      throw new BadRequestException('header에 토큰이 없습니다.');
     }
 
     const payload = await this.tokenService.verifyAccessToken(accessToken);
