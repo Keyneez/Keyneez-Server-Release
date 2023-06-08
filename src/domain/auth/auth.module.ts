@@ -2,7 +2,7 @@ import { Global, Module } from '@nestjs/common';
 import { OAuthController } from './controller/oauth.controller';
 import { OAuthService } from './service/oauth.service';
 import { TokenService } from './service/token.service';
-import { SnsProvider } from './service/sns.provider';
+import { SnsService } from './service/sns.service';
 import { HttpModule } from '@nestjs/axios';
 import { CacheModule } from '@nestjs/cache-manager';
 import { UserRepository } from '../user/repository/user.repository';
@@ -19,7 +19,7 @@ import { AuthService } from './service/auth.service';
   providers: [
     OAuthService,
     TokenService,
-    SnsProvider,
+    SnsService,
     UserRepository,
     AccessTokenGuard,
     RefreshTokenGuard,

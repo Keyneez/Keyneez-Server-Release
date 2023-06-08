@@ -9,7 +9,7 @@ import oauthConfig from 'src/global/configs/oauth.config';
 import { ConfigType } from '@nestjs/config';
 
 @Injectable()
-export class SnsProvider {
+export class SnsService {
   constructor(
     private readonly httpService: HttpService,
     @Inject(CACHE_MANAGER) private cacheManager: Cache,

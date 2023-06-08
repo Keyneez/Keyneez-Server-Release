@@ -1,5 +1,5 @@
 import { ConflictException, Injectable } from '@nestjs/common';
-import { SnsProvider } from './sns.provider';
+import { SnsService } from './sns.service';
 import { TokenService } from './token.service';
 import { UserRepository } from 'src/domain/user/repository/user.repository';
 import { OAuthLoginResponseDto } from '../dto/oauth-login.response.dto';
@@ -9,13 +9,13 @@ import { OAuthSignUpResponseDto } from '../dto/oauth-signup.response.dto';
 @Injectable()
 export class OAuthService {
   constructor(
-    private snsProvider: SnsProvider,
+    private snsService: SnsService,
     private tokenService: TokenService,
     private userRepository: UserRepository,
   ) {}
 
   async oauthKakaoLogin(idToken: string): Promise<OAuthLoginResponseDto> {
-    const oauthUser = await this.snsProvider.kakaoIdTokenVerify(idToken);
+    const oauthUser = await this.snsService.kakaoIdTokenVerify(idToken);
 
     const findUser = await this.userRepository.findByOAuthUserType(oauthUser);
     if (findUser) {
@@ -38,13 +38,13 @@ export class OAuthService {
       birth,
       gender,
     } = dto;
-    const oauthUser = await this.snsProvider.kakaoIdTokenVerify(idToken);
+    const oauthUser = await this.snsService.kakaoIdTokenVerify(idToken);
     const findUser = await this.userRepository.findByOAuthUserType(oauthUser);
     if (findUser) {
       throw new ConflictException('이미 가입된 유저입니다.');
     }
 
-    const userInfo = await this.snsProvider.getKakaoUserInfo(accessToken);
+    const userInfo = await this.snsService.getKakaoUserInfo(accessToken);
 
     // 아직 동의 항목이 추가 안돼서 구현X
     const name = '이름';
