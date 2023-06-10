@@ -8,7 +8,7 @@ import {
   SearchByKeywordDocs,
 } from 'docs/contents/contents.swagger';
 
-@Controller('contents')
+@Controller('api/contents')
 export class ContentsController {
   constructor(private readonly contentsService: ContentsService) {}
 
