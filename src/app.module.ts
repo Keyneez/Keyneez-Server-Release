@@ -1,3 +1,4 @@
+import { ContentsModule } from './domain/contents/contents.module';
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -14,6 +15,7 @@ import { PrismaModule } from './global/prisma/prisma.module';
       isGlobal: true,
     }),
     PrismaModule,
+    ContentsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
