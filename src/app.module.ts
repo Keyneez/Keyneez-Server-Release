@@ -1,3 +1,4 @@
+import { ContentsModule } from './domain/contents/contents.module';
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -6,7 +7,6 @@ import { ConfigModule } from '@nestjs/config';
 import appConfig from './global/configs/app.config';
 import databaseConfig from './global/configs/database.config';
 import { PrismaModule } from './global/prisma/prisma.module';
-import { AuthModule } from './domain/auth/auth.module';
 import jwtConfig from './global/configs/jwt.config';
 import oauthConfig from './global/configs/oauth.config';
 import { UserModule } from './domain/user/user.module';
@@ -18,8 +18,8 @@ import { UserModule } from './domain/user/user.module';
       isGlobal: true,
     }),
     PrismaModule,
-    AuthModule,
     UserModule,
+    ContentsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
