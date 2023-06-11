@@ -7,14 +7,18 @@ import { ConfigModule } from '@nestjs/config';
 import appConfig from './global/configs/app.config';
 import databaseConfig from './global/configs/database.config';
 import { PrismaModule } from './global/prisma/prisma.module';
+import jwtConfig from './global/configs/jwt.config';
+import oauthConfig from './global/configs/oauth.config';
+import { UserModule } from './domain/user/user.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
-      load: [appConfig, databaseConfig],
+      load: [appConfig, databaseConfig, jwtConfig, oauthConfig],
       isGlobal: true,
     }),
     PrismaModule,
+    UserModule,
     ContentsModule,
   ],
   controllers: [AppController],

@@ -17,9 +17,10 @@ model ContentCategories {
 model Tags {
   tag_pk            Int               @id @unique @default(autoincrement())
   tag               String            @unique @db.VarChar(30)
-  category_fk       String            @db.VarChar(30)
+  category_fk       Int
+  ContentCategories ContentCategories @relation(fields: [category_fk], references: [category_pk], onDelete: Cascade, map: "category_fk")
+  UserTags          UserTags[]
   Contents          Contents[]
-  ContentCategories ContentCategories @relation(fields: [category_fk], references: [category], onDelete: Cascade, map: "category_fk")
 }
 
 model Contents {
@@ -55,14 +56,30 @@ model Likes {
 }
 
 model Users {
-  user_pk    Int      @id @unique @default(autoincrement())
-  name       String   @db.VarChar(30)
-  age        Int
-  gender     String   @db.VarChar(20)
-  phone      String   @unique @db.VarChar(30)
-  birth      String   @db.VarChar(30)
-  sns_type   String   @db.VarChar(30)
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-  Likes      Likes[]
+  user_pk       Int        @id @unique @default(autoincrement())
+  name          String     @db.VarChar(30)
+  nickname      String     @db.VarChar(6)
+  email         String     @db.VarChar(30)
+  sns_id        String
+  age           Int
+  gender        String     @db.Char(1)
+  refresh_token String?    @db.VarChar(200)
+  birth         String     @db.VarChar(30)
+  sns_type      String     @db.VarChar(30)
+  created_at    DateTime   @default(now())
+  updated_at    DateTime   @updatedAt
+  Likes         Likes[]
+  UserTags      UserTags[]
+
+  @@unique([sns_id, sns_type], name: "sns_identifer")
+}
+
+model UserTags {
+  user_tag_pk Int   @id @default(autoincrement())
+  user_fk     Int
+  tag_fk      Int
+  Users       Users @relation(fields: [user_fk], references: [user_pk])
+  Tags        Tags  @relation(fields: [tag_fk], references: [tag_pk])
+
+  @@unique([user_fk, tag_fk], name: "users_tags")
 }
