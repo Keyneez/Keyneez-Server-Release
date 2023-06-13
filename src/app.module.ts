@@ -1,3 +1,4 @@
+import { AuthModule } from './domain/auth/auth.module';
 import { ContentsModule } from './domain/contents/contents.module';
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AppController } from './app.controller';
@@ -20,6 +21,7 @@ import { UserModule } from './domain/user/user.module';
     PrismaModule,
     UserModule,
     ContentsModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

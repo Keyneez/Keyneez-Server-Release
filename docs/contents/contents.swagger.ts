@@ -7,6 +7,7 @@ import {
   ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
+import { ContentsDetailResponseDto } from 'src/domain/contents/dtos/contents-detail-response.dto';
 import { ContentsResponseDto } from 'src/domain/contents/dtos/contents-response.dto';
 
 export function GetContentsDocs() {
@@ -37,7 +38,7 @@ export function GetContentDetailDocs() {
       type: 'number',
       description: '게시물 id',
     }),
-    ApiOkResponse({ type: ContentsResponseDto }),
+    ApiOkResponse({ type: ContentsDetailResponseDto }),
   );
 }
 

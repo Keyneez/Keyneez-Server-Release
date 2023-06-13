@@ -4,7 +4,6 @@ import { UserService } from './service/user.service';
 import { UserRepository } from './repository/user.repository';
 
 @Module({
-  imports: [],
   controllers: [UserController],
   providers: [UserService, UserRepository],
 })
