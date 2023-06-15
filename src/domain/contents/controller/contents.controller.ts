@@ -18,7 +18,6 @@ export class ContentsController {
   async getContents(
     @Query() contentsRequestDto: GetContentsRequestDto,
   ): Promise<ContentsResponseDto[]> {
-    console.log(contentsRequestDto.filter);
     return this.contentsService.getContents(contentsRequestDto);
   }
 
@@ -27,6 +26,7 @@ export class ContentsController {
   async searchByKeyword(
     @Query('keyword') keyword: string,
   ): Promise<ContentsResponseDto[]> {
+    console.log('contentsController /search');
     return this.contentsService.searchByKeyword(keyword);
   }
 

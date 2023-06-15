@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { IsEnum, IsOptional } from 'class-validator';
 
 export enum CategoryFilter {
   취미 = '취미',
@@ -13,5 +14,7 @@ export class GetContentsRequestDto {
     description:
       'Filter(취미, 활동, 진로), 전체를 불러올땐 아무값도 안넣으면 됩니다.',
   })
+  @IsOptional()
+  @IsEnum(CategoryFilter)
   filter?: CategoryFilter;
 }

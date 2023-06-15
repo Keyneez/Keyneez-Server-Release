@@ -35,6 +35,7 @@ export class ContentsRepository {
         end_at: true,
       },
     });
+
     return contents;
   }
 
@@ -81,6 +82,7 @@ export class ContentsRepository {
         end_at: true,
       },
     });
+
     return contents;
   }
 
