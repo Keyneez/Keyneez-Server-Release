@@ -1,9 +1,10 @@
 import { CategoryFilter } from './../dtos/contents-request.dto';
-import { Injectable } from '@nestjs/common';
+import { Injectable, BadRequestException } from '@nestjs/common';
 import { ContentCategories } from '@prisma/client';
 import { ContentsDetailResponseDto } from 'src/domain/contents/dtos/contents-detail-response.dto';
 import { PrismaService } from 'src/global/prisma/prima.service';
 import { ContentsResponseDto } from '../dtos/contents-response.dto';
+import { ContentsLikeResponseDTO } from '../dtos/contents-like-response.dto';
 
 @Injectable()
 export class ContentsRepository {
@@ -94,5 +95,33 @@ export class ContentsRepository {
     });
 
     return content;
+  }
+
+  async isLiked(
+    user: number,
+    content: number,
+  ): Promise<ContentsLikeResponseDTO> {
+    const liked = await this.prisma.likes.findFirst({
+      where: {
+        user,
+        content,
+      },
+    });
+
+    return liked;
+  }
+
+  async likeContent(
+    user: number,
+    content: number,
+  ): Promise<ContentsLikeResponseDTO> {
+    const like = await this.prisma.likes.create({
+      data: {
+        user,
+        content,
+      },
+    });
+
+    return like;
   }
 }

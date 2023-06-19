@@ -1,21 +1,27 @@
+import { ContentsLikeResponseDTO } from './../../src/domain/contents/dtos/contents-like-response.dto';
 import { applyDecorators } from '@nestjs/common';
 import {
+  ApiBadRequestResponse,
+  ApiHeader,
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiOperation,
   ApiParam,
   ApiQuery,
   ApiTags,
+  ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { ContentsDetailResponseDto } from 'src/domain/contents/dtos/contents-detail-response.dto';
 import { ContentsResponseDto } from 'src/domain/contents/dtos/contents-response.dto';
+import { ResponseDto } from 'src/global/dtos/response.dto';
 
 export function GetContentsDocs() {
   return applyDecorators(
     ApiTags('Contents'),
     ApiOperation({
-      summary:
-        '게시물 전체조회 / 필터별 조회 API 입니다. Query가 들어오지 않을 시 전체를 조회하며, filter 이름의 쿼리 스트링이 들어올 시 카테고리가 일치하는 게시물만 조회됩니다',
+      summary: '게시물 전체조회 / 필터별 조회 API 입니다',
+      description:
+        'Query가 들어오지 않을 시 전체를 조회하며, filter 이름의 쿼리 스트링이 들어올 시 카테고리가 일치하는 게시물만 조회됩니다',
     }),
     ApiQuery({
       name: 'filter',
@@ -59,5 +65,36 @@ export function SearchByKeywordDocs() {
         "keyword가 포함된 게시물이 없을 때: 'Not found contents including keyword: ' + ${keyword}'",
     }),
     ApiOkResponse({ type: [ContentsResponseDto] }),
+  );
+}
+
+export function LikeContentDocs() {
+  return applyDecorators(
+    ApiTags('ContentLike'),
+    ApiOperation({
+      summary: '게시물 좋아요',
+      description: 'access 토큰으로 유저 정보를 조회합니다.',
+    }),
+    ApiHeader({
+      name: 'Authorization',
+      description:
+        "access token이 필요합니다 key : Authorization, value : 'Bearer ${Token}'",
+      schema: {
+        example: 'Authorization Bearer ${Access 토큰}',
+      },
+    }),
+    ApiUnauthorizedResponse({
+      description: 'access 토큰이 만료된 경우',
+      schema: {
+        example: ResponseDto.fail(401, '만료된 token.'),
+      },
+    }),
+    ApiBadRequestResponse({
+      description: 'header에 토큰이 없는 경우 or token 값 자체가 이상한 경우',
+      schema: {
+        example: ResponseDto.fail(400, 'token이 필요합니다.'),
+      },
+    }),
+    ApiOkResponse({ type: ContentsLikeResponseDTO }),
   );
 }
