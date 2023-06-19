@@ -41,8 +41,12 @@ export class ContentsController {
   @GetLikedContentsDocs()
   async getLikedContent(
     @User() user: JwtAuthUser,
+    @Query() contentsRequestDto: GetContentsRequestDto,
   ): Promise<ContentsResponseDto[]> {
-    return this.contentsService.getLikedContents(user.userPk);
+    return this.contentsService.getLikedContents(
+      user.userPk,
+      contentsRequestDto,
+    );
   }
 
   @Get('/:pk')

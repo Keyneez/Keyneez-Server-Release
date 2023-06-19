@@ -103,6 +103,8 @@ export function GetLikedContentsDocs() {
     ApiTags('ContentLike'),
     ApiOperation({
       summary: '좋아요 한 게시물 목록 조회',
+      description:
+        'Query가 들어오지 않을 시 전체를 조회하며, filter 이름의 쿼리 스트링이 들어올 시 카테고리가 일치하는 게시물만 조회됩니다',
     }),
     ApiHeader({
       name: 'Authorization',
@@ -111,6 +113,12 @@ export function GetLikedContentsDocs() {
       schema: {
         example: 'Authorization Bearer ${Access 토큰}',
       },
+    }),
+    ApiQuery({
+      name: 'filter',
+      type: 'string',
+      description: '카테고리명 (취미 / 진로 / 활동)',
+      required: false,
     }),
     ApiUnauthorizedResponse({
       description: 'access 토큰이 만료된 경우',
@@ -123,6 +131,10 @@ export function GetLikedContentsDocs() {
       schema: {
         example: ResponseDto.fail(400, 'token이 필요합니다.'),
       },
+    }),
+    ApiNotFoundResponse({
+      description:
+        '좋아요를 누른 게시물이 없는 경우: 좋아요를 누른 (${contentsRequestDto.filter}) 게시물이 없습니다',
     }),
     ApiOkResponse({ type: [ContentsResponseDto] }),
   );

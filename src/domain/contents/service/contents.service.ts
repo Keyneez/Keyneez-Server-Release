@@ -34,9 +34,32 @@ export class ContentsService {
     return contents;
   }
 
-  async getLikedContents(user: number): Promise<ContentsResponseDto[]> {
-    const likedContents = this.contentsRepository.getLikedContents(user);
-    return likedContents;
+  async getLikedContents(
+    user: number,
+    contentsRequestDto: GetContentsRequestDto,
+  ): Promise<ContentsResponseDto[]> {
+    if (contentsRequestDto.filter) {
+      const contents = await this.contentsRepository.getFilteredLikedContents(
+        user,
+        contentsRequestDto.filter,
+      );
+
+      if (contents[0] == null) {
+        throw new NotFoundException(
+          `좋아요를 누른 ${contentsRequestDto.filter} 게시물이 없습니다`,
+        );
+      }
+
+      return contents;
+    }
+
+    const contents = await this.contentsRepository.getLikedContents(user);
+
+    if (!contents[0]) {
+      throw new NotFoundException(`좋아요를 누른 게시물이 없습니다`);
+    }
+
+    return contents;
   }
 
   async getContentDetail(pk: number): Promise<ContentsDetailResponseDto> {
