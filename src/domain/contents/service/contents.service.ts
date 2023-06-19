@@ -13,9 +13,7 @@ import { ContentsLikeResponseDTO } from '../dtos/contents-like-response.dto';
 export class ContentsService {
   constructor(private readonly contentsRepository: ContentsRepository) {}
 
-  async getContents(
-    contentsRequestDto: GetContentsRequestDto,
-  ): Promise<ContentsResponseDto[]> {
+  async getContents(user: number, contentsRequestDto: GetContentsRequestDto) {
     if (contentsRequestDto.filter) {
       const contents = await this.contentsRepository.getFilteredContents(
         contentsRequestDto.filter,
@@ -34,6 +32,11 @@ export class ContentsService {
       );
     }
     return contents;
+  }
+
+  async getLikedContents(user: number): Promise<ContentsResponseDto[]> {
+    const likedContents = this.contentsRepository.getLikedContents(user);
+    return likedContents;
   }
 
   async getContentDetail(pk: number): Promise<ContentsDetailResponseDto> {

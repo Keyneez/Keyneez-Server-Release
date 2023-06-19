@@ -6,6 +6,7 @@ import { ContentsService } from 'src/domain/contents/service/contents.service';
 import {
   GetContentDetailDocs,
   GetContentsDocs,
+  GetLikedContentsDocs,
   LikeContentDocs,
   SearchByKeywordDocs,
 } from 'docs/contents/contents.swagger';
@@ -18,11 +19,13 @@ export class ContentsController {
   constructor(private readonly contentsService: ContentsService) {}
 
   @Get('')
+  @UseGuards(AccessTokenGuard)
   @GetContentsDocs()
   async getContents(
+    @User() user: JwtAuthUser,
     @Query() contentsRequestDto: GetContentsRequestDto,
-  ): Promise<ContentsResponseDto[]> {
-    return this.contentsService.getContents(contentsRequestDto);
+  ) {
+    return this.contentsService.getContents(user.userPk, contentsRequestDto);
   }
 
   @Get('/search')
@@ -31,6 +34,15 @@ export class ContentsController {
     @Query('keyword') keyword: string,
   ): Promise<ContentsResponseDto[]> {
     return this.contentsService.searchByKeyword(keyword);
+  }
+
+  @Get('/liked')
+  @UseGuards(AccessTokenGuard)
+  @GetLikedContentsDocs()
+  async getLikedContent(
+    @User() user: JwtAuthUser,
+  ): Promise<ContentsResponseDto[]> {
+    return this.contentsService.getLikedContents(user.userPk);
   }
 
   @Get('/:pk')

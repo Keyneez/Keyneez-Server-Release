@@ -73,7 +73,6 @@ export function LikeContentDocs() {
     ApiTags('ContentLike'),
     ApiOperation({
       summary: '게시물 좋아요',
-      description: 'access 토큰으로 유저 정보를 조회합니다.',
     }),
     ApiHeader({
       name: 'Authorization',
@@ -96,5 +95,35 @@ export function LikeContentDocs() {
       },
     }),
     ApiOkResponse({ type: ContentsLikeResponseDTO }),
+  );
+}
+
+export function GetLikedContentsDocs() {
+  return applyDecorators(
+    ApiTags('ContentLike'),
+    ApiOperation({
+      summary: '좋아요 한 게시물 목록 조회',
+    }),
+    ApiHeader({
+      name: 'Authorization',
+      description:
+        "access token이 필요합니다 key : Authorization, value : 'Bearer ${Token}'",
+      schema: {
+        example: 'Authorization Bearer ${Access 토큰}',
+      },
+    }),
+    ApiUnauthorizedResponse({
+      description: 'access 토큰이 만료된 경우',
+      schema: {
+        example: ResponseDto.fail(401, '만료된 token.'),
+      },
+    }),
+    ApiBadRequestResponse({
+      description: 'header에 토큰이 없는 경우 or token 값 자체가 이상한 경우',
+      schema: {
+        example: ResponseDto.fail(400, 'token이 필요합니다.'),
+      },
+    }),
+    ApiOkResponse({ type: [ContentsResponseDto] }),
   );
 }

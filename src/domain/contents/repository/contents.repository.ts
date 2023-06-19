@@ -124,4 +124,30 @@ export class ContentsRepository {
 
     return like;
   }
+
+  async getLikedContents(user: number): Promise<ContentsResponseDto[]> {
+    const contents = await this.prisma.likes.findMany({
+      where: {
+        user,
+      },
+      include: {
+        Contents: {
+          select: {
+            content_pk: true,
+            title: true,
+            category: true,
+            img: true,
+            start_at: true,
+            end_at: true,
+          },
+        },
+      },
+    });
+
+    const result = contents.map((content) => {
+      return content.Contents;
+    });
+
+    return result;
+  }
 }
