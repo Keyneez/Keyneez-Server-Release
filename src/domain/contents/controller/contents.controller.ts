@@ -26,7 +26,6 @@ export class ContentsController {
   async searchByKeyword(
     @Query('keyword') keyword: string,
   ): Promise<ContentsResponseDto[]> {
-    console.log('contentsController /search');
     return this.contentsService.searchByKeyword(keyword);
   }
 
