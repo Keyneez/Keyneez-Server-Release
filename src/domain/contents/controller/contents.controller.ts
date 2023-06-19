@@ -1,5 +1,5 @@
 import { GetContentsRequestDto } from '../dtos/contents-request.dto';
-import { ContentsResponseDto } from '../dtos/contents-response.dto';
+import { ContentsDetailResponseDto } from '../dtos/contents-detail-response.dto';
 import { Controller, Get, Param, Query } from '@nestjs/common';
 import { ContentsService } from 'src/domain/contents/service/contents.service';
 import {
@@ -7,6 +7,7 @@ import {
   GetContentsDocs,
   SearchByKeywordDocs,
 } from 'docs/contents/contents.swagger';
+import { ContentsResponseDto } from '../dtos/contents-response.dto';
 
 @Controller('api/contents')
 export class ContentsController {
@@ -32,7 +33,7 @@ export class ContentsController {
   @GetContentDetailDocs()
   async getContentDetail(
     @Param('pk') pk: number,
-  ): Promise<ContentsResponseDto> {
+  ): Promise<ContentsDetailResponseDto> {
     return this.contentsService.getContentDetail(+pk);
   }
 }

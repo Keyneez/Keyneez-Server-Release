@@ -1,7 +1,8 @@
 import { ContentsRepository } from '../repository/contents.repository';
 import { GetContentsRequestDto } from '../dtos/contents-request.dto';
-import { ContentsResponseDto } from '../dtos/contents-response.dto';
+import { ContentsDetailResponseDto } from '../dtos/contents-detail-response.dto';
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { ContentsResponseDto } from '../dtos/contents-response.dto';
 
 @Injectable()
 export class ContentsService {
@@ -30,7 +31,7 @@ export class ContentsService {
     return contents;
   }
 
-  async getContentDetail(pk: number): Promise<ContentsResponseDto> {
+  async getContentDetail(pk: number): Promise<ContentsDetailResponseDto> {
     const content = await this.contentsRepository.getContentDetail(pk);
 
     return content;

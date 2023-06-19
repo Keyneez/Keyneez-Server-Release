@@ -18,15 +18,13 @@ model Tags {
   tag_pk            Int               @id @unique @default(autoincrement())
   tag               String            @unique @db.VarChar(30)
   category_fk       Int
+  Contents          Contents[]
   ContentCategories ContentCategories @relation(fields: [category_fk], references: [category_pk], onDelete: Cascade, map: "category_fk")
   UserTags          UserTags[]
-  Contents          Contents[]
 }
 
 model Contents {
   content_pk        Int               @id @unique @default(autoincrement())
-  category          String            @db.VarChar(30)
-  tag               String            @db.VarChar(30)
   title             String            @db.VarChar(30)
   link              String            @db.VarChar(100)
   img               String            @db.VarChar(100)
@@ -39,6 +37,8 @@ model Contents {
   benefit           String[]
   created_at        DateTime          @default(now())
   updated_at        DateTime          @updatedAt
+  category          String            @db.VarChar(30)
+  tag               String            @db.VarChar(30)
   ContentCategories ContentCategories @relation(fields: [category], references: [category], onDelete: Cascade, map: "category_fk")
   Tags              Tags              @relation(fields: [tag], references: [tag], onDelete: Cascade, map: "tag_fk")
   Likes             Likes[]
@@ -78,8 +78,8 @@ model UserTags {
   user_tag_pk Int   @id @default(autoincrement())
   user_fk     Int
   tag_fk      Int
-  Users       Users @relation(fields: [user_fk], references: [user_pk])
   Tags        Tags  @relation(fields: [tag_fk], references: [tag_pk])
+  Users       Users @relation(fields: [user_fk], references: [user_pk])
 
   @@unique([user_fk, tag_fk], name: "users_tags")
 }
