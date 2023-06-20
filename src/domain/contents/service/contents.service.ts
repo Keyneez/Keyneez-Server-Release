@@ -81,4 +81,8 @@ export class ContentsService {
 
     throw new BadRequestException('already liked');
   }
+
+  async unlikeContent(user: number, content: number[]): Promise<void> {
+    return await this.contentsRepository.unlikeContent(user, content);
+  }
 }

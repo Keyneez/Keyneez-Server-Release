@@ -98,6 +98,38 @@ export function LikeContentDocs() {
   );
 }
 
+export function UnLikeContentDocs() {
+  return applyDecorators(
+    ApiTags('ContentLike'),
+    ApiOperation({
+      summary: '게시물 좋아요 취소',
+      description:
+        '여러 개의 게시물을 좋아요 취소할 때에는 parameter에 여러 pk를 ,로 분리하여 입력하시면 됩니다',
+    }),
+    ApiHeader({
+      name: 'Authorization',
+      description:
+        "access token이 필요합니다 key : Authorization, value : 'Bearer ${Token}'",
+      schema: {
+        example: 'Authorization Bearer ${Access 토큰}',
+      },
+    }),
+    ApiUnauthorizedResponse({
+      description: 'access 토큰이 만료된 경우',
+      schema: {
+        example: ResponseDto.fail(401, '만료된 token.'),
+      },
+    }),
+    ApiBadRequestResponse({
+      description: 'header에 토큰이 없는 경우 or token 값 자체가 이상한 경우',
+      schema: {
+        example: ResponseDto.fail(400, 'token이 필요합니다.'),
+      },
+    }),
+    ApiOkResponse(),
+  );
+}
+
 export function GetLikedContentsDocs() {
   return applyDecorators(
     ApiTags('ContentLike'),

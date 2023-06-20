@@ -9,6 +9,7 @@ import {
   GetLikedContentsDocs,
   LikeContentDocs,
   SearchByKeywordDocs,
+  UnLikeContentDocs,
 } from 'docs/contents/contents.swagger';
 import { ContentsResponseDto } from '../dtos/contents-response.dto';
 import { AccessTokenGuard } from 'src/domain/auth/guard/access-token.guard';
@@ -65,5 +66,17 @@ export class ContentsController {
     @Param('pk') pk: number,
   ): Promise<ContentsLikeResponseDTO> {
     return this.contentsService.likeContent(user.userPk, +pk);
+  }
+
+  @Get('/:pk/unlike')
+  @UseGuards(AccessTokenGuard)
+  @UnLikeContentDocs()
+  async unikeContent(
+    @User() user: JwtAuthUser,
+    @Param('pk') pk: string,
+  ): Promise<void> {
+    const contents = pk.split(',').map(Number);
+
+    return this.contentsService.unlikeContent(user.userPk, contents);
   }
 }

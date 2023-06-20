@@ -125,6 +125,17 @@ export class ContentsRepository {
     return like;
   }
 
+  async unlikeContent(user: number, contents: number[]): Promise<void> {
+    for (const content of contents) {
+      await this.prisma.likes.deleteMany({
+        where: {
+          user,
+          content,
+        },
+      });
+    }
+  }
+
   async getFilteredLikedContents(
     user: number,
     filter: string,
