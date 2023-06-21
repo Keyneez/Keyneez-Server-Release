@@ -1,7 +1,7 @@
 import { ContentsLikeResponseDTO } from './../dtos/contents-like-response.dto';
 import { GetContentsRequestDto } from '../dtos/contents-request.dto';
 import { ContentsDetailResponseDto } from '../dtos/contents-detail-response.dto';
-import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common';
+import { Controller, Get, Param, Query, UseGuards, Post } from '@nestjs/common';
 import { ContentsService } from 'src/domain/contents/service/contents.service';
 import {
   GetContentDetailDocs,
@@ -58,7 +58,7 @@ export class ContentsController {
     return this.contentsService.getContentDetail(+pk);
   }
 
-  @Get('/:pk/like')
+  @Post('/:pk/like')
   @UseGuards(AccessTokenGuard)
   @LikeContentDocs()
   async likeContent(
@@ -68,7 +68,7 @@ export class ContentsController {
     return this.contentsService.likeContent(user.userPk, +pk);
   }
 
-  @Get('/:pk/unlike')
+  @Post('/:pk/unlike')
   @UseGuards(AccessTokenGuard)
   @UnLikeContentDocs()
   async unikeContent(

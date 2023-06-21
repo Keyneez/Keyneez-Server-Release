@@ -140,30 +140,27 @@ export class ContentsRepository {
     user: number,
     filter: string,
   ): Promise<ContentsResponseDto[]> {
-    const contents = await this.prisma.contents.findMany({
+    const contents = await this.prisma.likes.findMany({
       where: {
-        category: filter,
+        user,
       },
-      select: {
-        content_pk: true,
-        title: true,
-        category: true,
-        img: true,
-        start_at: true,
-        end_at: true,
-        Likes: {
-          where: {
-            user,
+      include: {
+        Contents: {
+          select: {
+            content_pk: true,
+            title: true,
+            category: true,
+            img: true,
+            start_at: true,
+            end_at: true,
           },
         },
       },
     });
 
-    const result = contents.map((content) => {
-      if (content.Likes[0]) {
-        return content;
-      }
-    });
+    const result = contents
+      .filter((content) => content.Contents.category === filter)
+      .map((content) => content.Contents);
 
     return result;
   }

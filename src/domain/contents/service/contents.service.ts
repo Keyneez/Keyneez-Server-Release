@@ -44,7 +44,7 @@ export class ContentsService {
         contentsRequestDto.filter,
       );
 
-      if (contents[0] == null) {
+      if (!contents[0]) {
         throw new NotFoundException(
           `좋아요를 누른 ${contentsRequestDto.filter} 게시물이 없습니다`,
         );
