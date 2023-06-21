@@ -16,6 +16,7 @@ import { UserModule } from './domain/user/user.module';
   imports: [
     ConfigModule.forRoot({
       load: [appConfig, databaseConfig, jwtConfig, oauthConfig],
+      envFilePath: process.env.NODE_ENV == 'local' ? './local.env' : '.env',
       isGlobal: true,
     }),
     PrismaModule,
