@@ -1,16 +1,16 @@
-EXIST_BLUE=$(docker compose -p keyneez-blue -f docker-compose.blue.yml ps | grep Up)
+EXIST_BLUE=$(docker compose -p keyneez-blue -f ./docker-compose/docker-compose.blue.yml ps | grep Up)
 
 if [ -z "$EXIST_BLUE" ]; then
-	docker compose -p keyneez-blue -f docker-compose.blue.yml pull &&
-	docker compose -p keyneez-blue -f docker-compose.blue.yml up -d
+	docker compose -p keyneez-blue -f ./docker-compose/docker-compose.blue.yml pull &&
+	docker compose -p keyneez-blue -f ./docker-compose/docker-compose.blue.yml up -d
 	BEFORE_COLOR="green"
 	AFTER_COLOR="blue"
 	BEFORE_PORT="4001"
 	AFTER_PORT="4000"
 	echo "현재 green container 실행 중.. blue 컨테이너 실행 시작 "
 else
-	docker compose -p keyneez-green -f docker-compose.green.yml pull &&
-	docker compose -p keyneez-green -f docker-compose.green.yml up -d
+	docker compose -p keyneez-green -f ./docker-compose/docker-compose.green.yml pull &&
+	docker compose -p keyneez-green -f ./docker-compose/docker-compose.green.yml up -d
 	BEFORE_COLOR="blue"
 	AFTER_COLOR="green"
 	BEFORE_PORT="4000"
@@ -45,6 +45,6 @@ sudo nginx -s reload
 echo "DEPLOY END!! new Container ${AFTER_COLOR} 서버 러닝 시작"
 
 echo "기존 ${BEFORE_COLOR} 컨테이너 종료 "
-docker compose -p keyneez-${BEFORE_COLOR} -f docker-compose.${BEFORE_COLOR}.yml down
+docker compose -p keyneez-${BEFORE_COLOR} -f ./docker-compose/docker-compose.${BEFORE_COLOR}.yml down
 echo "image clean Up"
 docker rmi -f $(docker images -f "dangling=true" -q) || true
