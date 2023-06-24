@@ -11,6 +11,7 @@ import { PrismaModule } from './global/prisma/prisma.module';
 import jwtConfig from './global/configs/jwt.config';
 import oauthConfig from './global/configs/oauth.config';
 import { UserModule } from './domain/user/user.module';
+import { TagModule } from './domain/tags/tag.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { UserModule } from './domain/user/user.module';
       load: [appConfig, databaseConfig, jwtConfig, oauthConfig],
       isGlobal: true,
     }),
+    TagModule,
     PrismaModule,
     UserModule,
     ContentsModule,
