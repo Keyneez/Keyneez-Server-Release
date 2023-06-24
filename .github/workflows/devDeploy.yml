@@ -68,9 +68,25 @@ jobs:
           username: InHyeok-J
           password: ${{secrets.GHCR_TOKEN}}
       - uses: actions/checkout@v3
-      - name: test
-        run: |
-          ls -al
       - name: blue green running
+        id: deploy
         run: |
           sh bluegreen.sh
+      - name: send success result
+        if: ${{success() && steps.deploy.conclusion=='success'}}
+        uses: ./.github/actions/discord_action
+        with:
+          title: '${{github.repository}}  배포결과'
+          author: ${{github.actor}}
+          webhookurl: ${{ secrets.DISCORD_WEBHOOK }}
+          color: 65280
+          description: '정상적으로  배포되었습니다'
+      - name: sned failure result
+        if: ${{ failure() && steps.deploy.conclusion=='failure'}}
+        uses: ./.github/actions/discord_action
+        with:
+          title: '${{github.repository}}  배포결과'
+          author: ${{github.actor}}
+          webhookurl: ${{ secrets.DISCORD_WEBHOOK }}
+          color: 14177041
+          description: '배포 실패 !'
