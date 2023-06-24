@@ -44,7 +44,7 @@ sudo sed -i "s/${BEFORE_PORT}/${AFTER_PORT}/" /etc/nginx/conf.d/service-url.inc
 sudo nginx -s reload
 echo "DEPLOY END!! new Container ${AFTER_COLOR} 서버 러닝 시작"
 
-echo "기존 ${BRFOR_COLOR} 컨테이너 종료 "
+echo "기존 ${BEFORE_COLOR} 컨테이너 종료 "
 docker compose -p keyneez-${BEFORE_COLOR} -f docker-compose.${BEFORE_COLOR}.yml down
 echo "image clean Up"
 docker rmi -f $(docker images -f "dangling=true" -q) || true
