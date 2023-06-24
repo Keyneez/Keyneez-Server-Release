@@ -1,4 +1,3 @@
-import { ContentsLikeResponseDTO } from './../../src/domain/contents/dtos/contents-like-response.dto';
 import { applyDecorators } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
@@ -14,6 +13,7 @@ import {
 import { ContentsDetailResponseDto } from 'src/domain/contents/dtos/contents-detail-response.dto';
 import { ContentsResponseDto } from 'src/domain/contents/dtos/contents-response.dto';
 import { ResponseDto } from 'src/global/dtos/response.dto';
+import { ContentsLikedResponseDto } from 'src/domain/contents/dtos/contents-liked-response.dto';
 
 export function GetContentsDocs() {
   return applyDecorators(
@@ -94,7 +94,7 @@ export function LikeContentDocs() {
         example: ResponseDto.fail(400, 'token이 필요합니다.'),
       },
     }),
-    ApiOkResponse({ type: ContentsLikeResponseDTO }),
+    ApiOkResponse({ type: ContentsLikedResponseDto }),
   );
 }
 
@@ -168,6 +168,6 @@ export function GetLikedContentsDocs() {
       description:
         '좋아요를 누른 게시물이 없는 경우: 좋아요를 누른 (${contentsRequestDto.filter}) 게시물이 없습니다',
     }),
-    ApiOkResponse({ type: [ContentsResponseDto] }),
+    ApiOkResponse({ type: [ContentsLikedResponseDto] }),
   );
 }

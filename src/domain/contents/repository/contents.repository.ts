@@ -4,7 +4,8 @@ import { ContentCategories } from '@prisma/client';
 import { ContentsDetailResponseDto } from 'src/domain/contents/dtos/contents-detail-response.dto';
 import { PrismaService } from 'src/global/prisma/prima.service';
 import { ContentsResponseDto } from '../dtos/contents-response.dto';
-import { ContentsLikeResponseDTO } from '../dtos/contents-like-response.dto';
+import { LikeResponseDTO } from '../dtos/like-response.dto';
+import { ContentsLikedResponseDto } from '../dtos/contents-liked-response.dto';
 
 @Injectable()
 export class ContentsRepository {
@@ -21,6 +22,7 @@ export class ContentsRepository {
   }
 
   async getFilteredContents(
+    user: number,
     filter: CategoryFilter,
   ): Promise<ContentsResponseDto[]> {
     const contents = await this.prisma.contents.findMany({
@@ -34,13 +36,18 @@ export class ContentsRepository {
         img: true,
         start_at: true,
         end_at: true,
+        Likes: {
+          where: {
+            user,
+          },
+        },
       },
     });
 
     return contents;
   }
 
-  async getAllContents(): Promise<ContentsResponseDto[]> {
+  async getAllContents(user: number): Promise<ContentsResponseDto[]> {
     return await this.prisma.contents.findMany({
       select: {
         content_pk: true,
@@ -49,11 +56,19 @@ export class ContentsRepository {
         img: true,
         start_at: true,
         end_at: true,
+        Likes: {
+          where: {
+            user,
+          },
+        },
       },
     });
   }
 
-  async searchByKeyword(keyword: string): Promise<ContentsResponseDto[]> {
+  async searchByKeyword(
+    user: number,
+    keyword: string,
+  ): Promise<ContentsResponseDto[]> {
     const contents = await this.prisma.contents.findMany({
       where: {
         OR: [
@@ -81,26 +96,38 @@ export class ContentsRepository {
         img: true,
         start_at: true,
         end_at: true,
+        Likes: {
+          where: {
+            user,
+          },
+        },
       },
     });
 
     return contents;
   }
 
-  async getContentDetail(pk: number): Promise<ContentsDetailResponseDto> {
+  async getContentDetail(
+    user: number,
+    pk: number,
+  ): Promise<ContentsDetailResponseDto> {
     const content = await this.prisma.contents.findUnique({
       where: {
         content_pk: pk,
+      },
+      include: {
+        Likes: {
+          where: {
+            user,
+          },
+        },
       },
     });
 
     return content;
   }
 
-  async isLiked(
-    user: number,
-    content: number,
-  ): Promise<ContentsLikeResponseDTO> {
+  async isLiked(user: number, content: number): Promise<LikeResponseDTO> {
     const liked = await this.prisma.likes.findFirst({
       where: {
         user,
@@ -111,10 +138,7 @@ export class ContentsRepository {
     return liked;
   }
 
-  async likeContent(
-    user: number,
-    content: number,
-  ): Promise<ContentsLikeResponseDTO> {
+  async likeContent(user: number, content: number): Promise<LikeResponseDTO> {
     const like = await this.prisma.likes.create({
       data: {
         user,
@@ -139,12 +163,12 @@ export class ContentsRepository {
   async getFilteredLikedContents(
     user: number,
     filter: string,
-  ): Promise<ContentsResponseDto[]> {
+  ): Promise<ContentsLikedResponseDto[]> {
     const contents = await this.prisma.likes.findMany({
       where: {
         user,
       },
-      include: {
+      select: {
         Contents: {
           select: {
             content_pk: true,
@@ -165,7 +189,7 @@ export class ContentsRepository {
     return result;
   }
 
-  async getLikedContents(user: number): Promise<ContentsResponseDto[]> {
+  async getLikedContents(user: number): Promise<ContentsLikedResponseDto[]> {
     const contents = await this.prisma.likes.findMany({
       where: {
         user,

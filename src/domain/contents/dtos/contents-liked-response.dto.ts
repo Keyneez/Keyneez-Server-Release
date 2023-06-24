@@ -1,30 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNumber } from 'class-validator';
 
-export class Like {
-  @ApiProperty({
-    type: Number,
-    nullable: false,
-    description: '좋아요 정보 key',
-  })
-  readonly liked_pk: number;
-
-  @ApiProperty({
-    type: Number,
-    nullable: false,
-    description: '좋아요 누른 유저 Pk',
-  })
-  readonly user: number;
-
-  @ApiProperty({
-    type: Number,
-    nullable: false,
-    description: '좋아요 눌린 게시물 Pk',
-  })
-  readonly content: number;
-}
-
-export class ContentsResponseDto {
+export class ContentsLikedResponseDto {
   @ApiProperty({
     type: Number,
     required: true,
@@ -67,11 +44,4 @@ export class ContentsResponseDto {
     description: '혜택 종료 일자',
   })
   readonly end_at: string;
-
-  @ApiProperty({
-    type: [Like],
-    nullable: false,
-    description: '좋아요 정보(없을 경우 빈 리스트)',
-  })
-  readonly Likes: Like[];
 }

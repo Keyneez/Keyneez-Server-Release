@@ -1,28 +1,24 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNumber } from 'class-validator';
 
-export class ContentsLikeResponseDTO {
+export class LikeResponseDTO {
   @ApiProperty({
     type: Number,
     required: true,
-    description: '게시물 id',
+    description: 'liked pk',
   })
-  @IsNumber()
   readonly liked_pk: number;
 
   @ApiProperty({
     type: Number,
     required: true,
-    description: '게시물 id',
+    description: 'user pk',
   })
-  @IsNumber()
   readonly user: number;
 
   @ApiProperty({
     type: Number,
     required: true,
-    description: '게시물 id',
+    description: 'content pk',
   })
-  @IsNumber()
   readonly content: number;
 }

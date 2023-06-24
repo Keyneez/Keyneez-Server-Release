@@ -7,7 +7,8 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 import { ContentsResponseDto } from '../dtos/contents-response.dto';
-import { ContentsLikeResponseDTO } from '../dtos/contents-like-response.dto';
+import { LikeResponseDTO } from '../dtos/like-response.dto';
+import { ContentsLikedResponseDto } from '../dtos/contents-liked-response.dto';
 
 @Injectable()
 export class ContentsService {
@@ -16,16 +17,23 @@ export class ContentsService {
   async getContents(user: number, contentsRequestDto: GetContentsRequestDto) {
     if (contentsRequestDto.filter) {
       const contents = await this.contentsRepository.getFilteredContents(
+        user,
         contentsRequestDto.filter,
       );
       return contents;
     }
 
-    return await this.contentsRepository.getAllContents();
+    return await this.contentsRepository.getAllContents(user);
   }
 
-  async searchByKeyword(keyword: string): Promise<ContentsResponseDto[]> {
-    const contents = await this.contentsRepository.searchByKeyword(keyword);
+  async searchByKeyword(
+    user: number,
+    keyword: string,
+  ): Promise<ContentsResponseDto[]> {
+    const contents = await this.contentsRepository.searchByKeyword(
+      user,
+      keyword,
+    );
     if (!contents[0]) {
       throw new NotFoundException(
         'Not found contents including keyword: ' + keyword,
@@ -37,7 +45,7 @@ export class ContentsService {
   async getLikedContents(
     user: number,
     contentsRequestDto: GetContentsRequestDto,
-  ): Promise<ContentsResponseDto[]> {
+  ): Promise<ContentsLikedResponseDto[]> {
     if (contentsRequestDto.filter) {
       const contents = await this.contentsRepository.getFilteredLikedContents(
         user,
@@ -62,16 +70,16 @@ export class ContentsService {
     return contents;
   }
 
-  async getContentDetail(pk: number): Promise<ContentsDetailResponseDto> {
-    const content = await this.contentsRepository.getContentDetail(pk);
+  async getContentDetail(
+    user: number,
+    pk: number,
+  ): Promise<ContentsDetailResponseDto> {
+    const content = await this.contentsRepository.getContentDetail(user, pk);
 
     return content;
   }
 
-  async likeContent(
-    user: number,
-    content: number,
-  ): Promise<ContentsLikeResponseDTO> {
+  async likeContent(user: number, content: number): Promise<LikeResponseDTO> {
     const liked = await this.contentsRepository.isLiked(user, content);
 
     if (!liked) {

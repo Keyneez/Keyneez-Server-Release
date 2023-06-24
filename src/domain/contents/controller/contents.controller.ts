@@ -1,4 +1,4 @@
-import { ContentsLikeResponseDTO } from './../dtos/contents-like-response.dto';
+import { LikeResponseDTO } from '../dtos/like-response.dto';
 import { GetContentsRequestDto } from '../dtos/contents-request.dto';
 import { ContentsDetailResponseDto } from '../dtos/contents-detail-response.dto';
 import { Controller, Get, Param, Query, UseGuards, Post } from '@nestjs/common';
@@ -14,6 +14,7 @@ import {
 import { ContentsResponseDto } from '../dtos/contents-response.dto';
 import { AccessTokenGuard } from 'src/domain/auth/guard/access-token.guard';
 import { JwtAuthUser, User } from 'src/global/decorators/jwt.decorator';
+import { ContentsLikedResponseDto } from '../dtos/contents-liked-response.dto';
 
 @Controller('api/contents')
 export class ContentsController {
@@ -25,16 +26,18 @@ export class ContentsController {
   async getContents(
     @User() user: JwtAuthUser,
     @Query() contentsRequestDto: GetContentsRequestDto,
-  ) {
+  ): Promise<ContentsResponseDto[]> {
     return this.contentsService.getContents(user.userPk, contentsRequestDto);
   }
 
   @Get('/search')
+  @UseGuards(AccessTokenGuard)
   @SearchByKeywordDocs()
   async searchByKeyword(
+    @User() user: JwtAuthUser,
     @Query('keyword') keyword: string,
   ): Promise<ContentsResponseDto[]> {
-    return this.contentsService.searchByKeyword(keyword);
+    return this.contentsService.searchByKeyword(user.userPk, keyword);
   }
 
   @Get('/liked')
@@ -43,7 +46,7 @@ export class ContentsController {
   async getLikedContent(
     @User() user: JwtAuthUser,
     @Query() contentsRequestDto: GetContentsRequestDto,
-  ): Promise<ContentsResponseDto[]> {
+  ): Promise<ContentsLikedResponseDto[]> {
     return this.contentsService.getLikedContents(
       user.userPk,
       contentsRequestDto,
@@ -51,11 +54,13 @@ export class ContentsController {
   }
 
   @Get('/:pk')
+  @UseGuards(AccessTokenGuard)
   @GetContentDetailDocs()
   async getContentDetail(
+    @User() user: JwtAuthUser,
     @Param('pk') pk: number,
   ): Promise<ContentsDetailResponseDto> {
-    return this.contentsService.getContentDetail(+pk);
+    return this.contentsService.getContentDetail(user.userPk, +pk);
   }
 
   @Post('/:pk/like')
@@ -64,7 +69,7 @@ export class ContentsController {
   async likeContent(
     @User() user: JwtAuthUser,
     @Param('pk') pk: number,
-  ): Promise<ContentsLikeResponseDTO> {
+  ): Promise<LikeResponseDTO> {
     return this.contentsService.likeContent(user.userPk, +pk);
   }
 
