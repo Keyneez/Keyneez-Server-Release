@@ -80,6 +80,8 @@ export class ContentsController {
     @User() user: JwtAuthUser,
     @Param('pk') pk: string,
   ): Promise<void> {
+    //! number type에 대한 검증 필요
+    //! validation 시 복잡하면 BODY로 넘기기
     const contents = pk.split(',').map(Number);
 
     return this.contentsService.unlikeContent(user.userPk, contents);

@@ -151,10 +151,12 @@ export class ContentsRepository {
 
   async unlikeContent(user: number, contents: number[]): Promise<void> {
     for (const content of contents) {
-      await this.prisma.likes.deleteMany({
+      await this.prisma.likes.delete({
         where: {
-          user,
-          content,
+          likes_userid: {
+            user,
+            content,
+          },
         },
       });
     }
@@ -167,6 +169,9 @@ export class ContentsRepository {
     const contents = await this.prisma.likes.findMany({
       where: {
         user,
+        Contents: {
+          category: filter,
+        },
       },
       select: {
         Contents: {
@@ -182,9 +187,7 @@ export class ContentsRepository {
       },
     });
 
-    const result = contents
-      .filter((content) => content.Contents.category === filter)
-      .map((content) => content.Contents);
+    const result = contents.map((content) => content.Contents);
 
     return result;
   }
