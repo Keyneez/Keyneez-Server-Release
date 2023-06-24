@@ -17,7 +17,8 @@ else
 	AFTER_PORT="4001"
 	echo "현재 blue 컨테이너 실행 중 ... green 컨테이너 실행 시작"
 fi
-
+echo "------------------------------docker health check -----------------------"
+docker ps -a
 echo "${AFTER_COLOR} 컨테이너 구동 준비 완료, server port = ${AFTER_PORT}"
 
 for cnt in 1 2 3 4 5 6 7 8 9 10
@@ -36,6 +37,8 @@ done
 echo "count : $cnt"
 if [ $cnt -eq 10 ];
 then
+	docker ps -a
+	docker logs --tail 30 keyneez-${AFTER_COLOR}
 	echo "${AFTER_COLOR} 서버가 정상적으로 구동 되지 않았습니다"
 	exit 1
 fi
