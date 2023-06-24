@@ -1,39 +1,89 @@
+import { LikeResponseDTO } from '../dtos/like-response.dto';
 import { GetContentsRequestDto } from '../dtos/contents-request.dto';
 import { ContentsDetailResponseDto } from '../dtos/contents-detail-response.dto';
-import { Controller, Get, Param, Query } from '@nestjs/common';
+import { Controller, Get, Param, Query, UseGuards, Post } from '@nestjs/common';
 import { ContentsService } from 'src/domain/contents/service/contents.service';
 import {
   GetContentDetailDocs,
   GetContentsDocs,
+  GetLikedContentsDocs,
+  LikeContentDocs,
   SearchByKeywordDocs,
+  UnLikeContentDocs,
 } from 'docs/contents/contents.swagger';
 import { ContentsResponseDto } from '../dtos/contents-response.dto';
+import { AccessTokenGuard } from 'src/domain/auth/guard/access-token.guard';
+import { JwtAuthUser, User } from 'src/global/decorators/jwt.decorator';
+import { ContentsLikedResponseDto } from '../dtos/contents-liked-response.dto';
 
 @Controller('api/contents')
 export class ContentsController {
   constructor(private readonly contentsService: ContentsService) {}
 
   @Get('')
+  @UseGuards(AccessTokenGuard)
   @GetContentsDocs()
   async getContents(
+    @User() user: JwtAuthUser,
     @Query() contentsRequestDto: GetContentsRequestDto,
   ): Promise<ContentsResponseDto[]> {
-    return this.contentsService.getContents(contentsRequestDto);
+    return this.contentsService.getContents(user.userPk, contentsRequestDto);
   }
 
   @Get('/search')
+  @UseGuards(AccessTokenGuard)
   @SearchByKeywordDocs()
   async searchByKeyword(
+    @User() user: JwtAuthUser,
     @Query('keyword') keyword: string,
   ): Promise<ContentsResponseDto[]> {
-    return this.contentsService.searchByKeyword(keyword);
+    return this.contentsService.searchByKeyword(user.userPk, keyword);
+  }
+
+  @Get('/liked')
+  @UseGuards(AccessTokenGuard)
+  @GetLikedContentsDocs()
+  async getLikedContent(
+    @User() user: JwtAuthUser,
+    @Query() contentsRequestDto: GetContentsRequestDto,
+  ): Promise<ContentsLikedResponseDto[]> {
+    return this.contentsService.getLikedContents(
+      user.userPk,
+      contentsRequestDto,
+    );
   }
 
   @Get('/:pk')
+  @UseGuards(AccessTokenGuard)
   @GetContentDetailDocs()
   async getContentDetail(
+    @User() user: JwtAuthUser,
     @Param('pk') pk: number,
   ): Promise<ContentsDetailResponseDto> {
-    return this.contentsService.getContentDetail(+pk);
+    return this.contentsService.getContentDetail(user.userPk, +pk);
+  }
+
+  @Post('/:pk/like')
+  @UseGuards(AccessTokenGuard)
+  @LikeContentDocs()
+  async likeContent(
+    @User() user: JwtAuthUser,
+    @Param('pk') pk: number,
+  ): Promise<LikeResponseDTO> {
+    return this.contentsService.likeContent(user.userPk, +pk);
+  }
+
+  @Post('/:pk/unlike')
+  @UseGuards(AccessTokenGuard)
+  @UnLikeContentDocs()
+  async unikeContent(
+    @User() user: JwtAuthUser,
+    @Param('pk') pk: string,
+  ): Promise<void> {
+    //! number type에 대한 검증 필요
+    //! validation 시 복잡하면 BODY로 넘기기
+    const contents = pk.split(',').map(Number);
+
+    return this.contentsService.unlikeContent(user.userPk, contents);
   }
 }
