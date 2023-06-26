@@ -1,0 +1,92 @@
+name: dev deploy
+
+on:
+  push:
+    branches: ['develop']
+
+  workflow_dispatch:
+
+env:
+  VERSION: ${{github.sha}}
+  DOCKER_IMAGE: ghcr.io/inhyeok-j/keyneez-server-release
+
+jobs:
+  build-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: create env files
+        uses: SpicyPizza/create-envfile@v2.0
+        with:
+          envkey_DATABASE_URL: ${{secrets.DEV_DATABASE_URL}}
+          envkey_PORT: ${{secrets.PORT}}
+          envkey_KAKAO_CLIENT_ID: ${{secrets.KAKAO_CLIENT_ID}}
+          envkey_KAKAO_ADMIN_KEY: ${{secrets.KAKAO_ADMIN_KEY}}
+          envkey_ACCESS_TOKEN_SECRET: ${{secrets.DEV_ACCESS_TOKEN_SECRET}}
+          envkey_ACCESS_TOKEN_EXPIRED: ${{secrets.DEV_ACCESS_TOKEN_EXPIRED}}
+          envkey_REFRESH_TOKEN_SECRET: ${{secrets.DEV_REFRESH_TOKEN_SECRET}}
+          envkey_REFRESH_TOKEN_EXPIRED: ${{secrets.DEV_REFRESH_TOKEN_EXPIRED}}
+
+      #캐시 사용
+      - name: Set Up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Cache Docker Layer
+        uses: actions/cache@v2
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{runner.os}}-buildx-${{env.version}}
+          restore-keys: |
+            ${{ runner.os }}-buildx-
+
+      - name: Login to Github registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: InHyeok-J
+          password: ${{secrets.GHCR_TOKEN}}
+
+      - name: build and push
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          builder: ${{steps.buildx.outputs.name}}
+          push: true
+          tags: ${{env.DOCKER_IMAGE}}:latest
+  # 배포
+  deploy:
+    needs: build-push
+    name: Deploy
+    runs-on: [self-hosted, keyneez]
+    steps:
+      - name: Login to Github registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: InHyeok-J
+          password: ${{secrets.GHCR_TOKEN}}
+      - uses: actions/checkout@v3
+      - name: blue green running
+        id: deploy
+        run: |
+          sh bluegreen.sh
+      - name: send success result
+        if: ${{success() && steps.deploy.conclusion=='success'}}
+        uses: ./.github/actions/discord_action
+        with:
+          title: '${{github.repository}}  배포결과'
+          author: ${{github.actor}}
+          webhookurl: ${{ secrets.DISCORD_WEBHOOK }}
+          color: 65280
+          description: '정상적으로  배포되었습니다'
+      - name: sned failure result
+        if: ${{ failure() && steps.deploy.conclusion=='failure'}}
+        uses: ./.github/actions/discord_action
+        with:
+          title: '${{github.repository}}  배포결과'
+          author: ${{github.actor}}
+          webhookurl: ${{ secrets.DISCORD_WEBHOOK }}
+          color: 14177041
+          description: '배포 실패 !'

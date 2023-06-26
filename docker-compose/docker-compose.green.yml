@@ -1,0 +1,8 @@
+version: '3.8'
+
+services:
+  api:
+    image: ghcr.io/inhyeok-j/keyneez-server-release:latest
+    container_name: keyneez-green
+    ports:
+      - 4001:4000
