@@ -45,7 +45,13 @@ export class UserRepository {
     age: number,
     gender: string,
     birth: string,
+    tagPks: number[],
   ) {
+    const tags = tagPks.map((tagPk) => {
+      return {
+        tag_fk: tagPk,
+      };
+    });
     return await this.prisma.users.create({
       data: {
         sns_id: oauthUser.snsId,
@@ -56,6 +62,11 @@ export class UserRepository {
         age,
         gender,
         birth,
+        UserTags: {
+          createMany: {
+            data: tags,
+          },
+        },
       },
     });
   }
