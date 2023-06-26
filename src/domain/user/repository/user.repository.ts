@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { OAuthUserTypeDto } from 'src/domain/auth/dto/oauth-user-type.dto';
+import { OAuthUserTypeDto } from 'src/domain/auth/dtos/oauth-user-type.dto';
 import { PrismaService } from 'src/global/prisma/prima.service';
 
 @Injectable()

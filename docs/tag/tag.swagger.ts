@@ -1,6 +1,6 @@
 import { applyDecorators } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { TagResponseDto } from '../../src/domain/tags/dto/tag.response.dto';
+import { TagResponseDto } from '../../src/domain/tags/dtos/tag.response.dto';
 
 export function GetAllTagDocs() {
   return applyDecorators(

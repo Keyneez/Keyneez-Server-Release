@@ -8,7 +8,7 @@ import {
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-import { RefreshResponseDto } from 'src/domain/auth/dto/refresh-response.dto';
+import { RefreshResponseDto } from 'src/domain/auth/dtos/refresh-response.dto';
 import { ResponseDto } from 'src/global/dtos/response.dto';
 
 export function LogOutDocs() {

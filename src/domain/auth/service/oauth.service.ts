@@ -7,9 +7,9 @@ import {
 import { SnsService } from './sns.service';
 import { TokenService } from './token.service';
 import { UserRepository } from 'src/domain/user/repository/user.repository';
-import { OAuthLoginResponseDto } from '../dto/oauth-login.response.dto';
-import { OAuthSignUpRequestDto } from '../dto/oauth-signup.request.dto';
-import { OAuthSignUpResponseDto } from '../dto/oauth-signup.response.dto';
+import { OAuthLoginResponseDto } from '../dtos/oauth-login.response.dto';
+import { OAuthSignUpRequestDto } from '../dtos/oauth-signup.request.dto';
+import { OAuthSignUpResponseDto } from '../dtos/oauth-signup.response.dto';
 
 @Injectable()
 export class OAuthService {

@@ -1,6 +1,6 @@
 import { Users } from '@prisma/client';
 import { Token } from '../service/token.service';
-import { UserInfoResponseDto } from 'src/domain/user/dto/user-info.response.dto';
+import { UserInfoResponseDto } from 'src/domain/user/dtos/user-info.response.dto';
 import { ApiProperty } from '@nestjs/swagger';
 import { TokenResponseDto } from './token.response.dto';
 

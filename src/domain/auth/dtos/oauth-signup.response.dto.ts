@@ -1,4 +1,4 @@
-import { UserInfoResponseDto } from 'src/domain/user/dto/user-info.response.dto';
+import { UserInfoResponseDto } from 'src/domain/user/dtos/user-info.response.dto';
 import { Token } from '../service/token.service';
 import { Users } from '@prisma/client';
 import { TokenResponseDto } from './token.response.dto';

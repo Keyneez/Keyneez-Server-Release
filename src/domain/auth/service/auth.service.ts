@@ -6,7 +6,7 @@ import {
 import { UserRepository } from 'src/domain/user/repository/user.repository';
 import { TokenService } from './token.service';
 import { Users } from '@prisma/client';
-import { RefreshResponseDto } from '../dto/refresh-response.dto';
+import { RefreshResponseDto } from '../dtos/refresh-response.dto';
 
 @Injectable()
 export class AuthService {
