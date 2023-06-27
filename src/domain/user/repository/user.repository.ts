@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { OAuthUserTypeDto } from 'src/domain/auth/dto/oauth-user-type.dto';
+import { OAuthUserTypeDto } from 'src/domain/auth/dtos/oauth-user-type.dto';
 import { PrismaService } from 'src/global/prisma/prima.service';
 
 @Injectable()
@@ -45,7 +45,13 @@ export class UserRepository {
     age: number,
     gender: string,
     birth: string,
+    tagPks: number[],
   ) {
+    const tags = tagPks.map((tagPk) => {
+      return {
+        tag_fk: tagPk,
+      };
+    });
     return await this.prisma.users.create({
       data: {
         sns_id: oauthUser.snsId,
@@ -56,6 +62,11 @@ export class UserRepository {
         age,
         gender,
         birth,
+        UserTags: {
+          createMany: {
+            data: tags,
+          },
+        },
       },
     });
   }

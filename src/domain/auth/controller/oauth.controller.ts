@@ -1,8 +1,8 @@
 import { Body, Controller, HttpStatus, Post, UseGuards } from '@nestjs/common';
 import { ResponseDto } from 'src/global/dtos/response.dto';
-import { OAuthLoginRequestDto } from '../dto/oauth-login.requst.dto';
+import { OAuthLoginRequestDto } from '../dtos/oauth-login.requst.dto';
 import { OAuthService } from '../service/oauth.service';
-import { OAuthSignUpRequestDto } from '../dto/oauth-signup.request.dto';
+import { OAuthSignUpRequestDto } from '../dtos/oauth-signup.request.dto';
 import {
   OAuthKakaoLoginDocs,
   OAuthKakaoSignUpDocs,

@@ -1,10 +1,15 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { SnsService } from './sns.service';
 import { TokenService } from './token.service';
 import { UserRepository } from 'src/domain/user/repository/user.repository';
-import { OAuthLoginResponseDto } from '../dto/oauth-login.response.dto';
-import { OAuthSignUpRequestDto } from '../dto/oauth-signup.request.dto';
-import { OAuthSignUpResponseDto } from '../dto/oauth-signup.response.dto';
+import { OAuthLoginResponseDto } from '../dtos/oauth-login.response.dto';
+import { OAuthSignUpRequestDto } from '../dtos/oauth-signup.request.dto';
+import { OAuthSignUpResponseDto } from '../dtos/oauth-signup.response.dto';
 
 @Injectable()
 export class OAuthService {
@@ -37,6 +42,7 @@ export class OAuthService {
       age,
       birth,
       gender,
+      tag_pks: tagPks,
     } = dto;
     const oauthUser = await this.snsService.kakaoIdTokenVerify(idToken);
     const findUser = await this.userRepository.findByOAuthUserType(oauthUser);
@@ -49,21 +55,29 @@ export class OAuthService {
     // 아직 동의 항목이 추가 안돼서 구현X
     const name = '이름';
     const email = userInfo.email;
-    const user = await this.userRepository.create(
-      oauthUser,
-      nickname,
-      name,
-      email,
-      age,
-      gender,
-      birth,
-    );
+    try {
+      const user = await this.userRepository.create(
+        oauthUser,
+        nickname,
+        name,
+        email,
+        age,
+        gender,
+        birth,
+        tagPks,
+      );
 
-    const token = await this.tokenService.generateToken(user);
-    await this.userRepository.updateRefreshToken(
-      user.user_pk,
-      token.refreshToken,
-    );
-    return new OAuthSignUpResponseDto(token, user);
+      const token = await this.tokenService.generateToken(user);
+      await this.userRepository.updateRefreshToken(
+        user.user_pk,
+        token.refreshToken,
+      );
+      return new OAuthSignUpResponseDto(token, user);
+    } catch (e) {
+      if (e.code === 'P2003') {
+        throw new NotFoundException('해당 태그를 찾을 수 없습니다');
+      }
+      throw new InternalServerErrorException('서버 error');
+    }
   }
 }

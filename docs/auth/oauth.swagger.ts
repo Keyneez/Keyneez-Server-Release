@@ -8,8 +8,8 @@ import {
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-import { OAuthLoginResponseDto } from 'src/domain/auth/dto/oauth-login.response.dto';
-import { OAuthSignUpResponseDto } from 'src/domain/auth/dto/oauth-signup.response.dto';
+import { OAuthLoginResponseDto } from 'src/domain/auth/dtos/oauth-login.response.dto';
+import { OAuthSignUpResponseDto } from 'src/domain/auth/dtos/oauth-signup.response.dto';
 import { ResponseDto } from 'src/global/dtos/response.dto';
 
 export function OAuthKakaoLoginDocs() {

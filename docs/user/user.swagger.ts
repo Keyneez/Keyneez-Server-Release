@@ -7,7 +7,7 @@ import {
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-import { UserInfoResponseDto } from 'src/domain/user/dto/user-info.response.dto';
+import { UserInfoResponseDto } from 'src/domain/user/dtos/user-info.response.dto';
 import { ResponseDto } from 'src/global/dtos/response.dto';
 
 export function GetUserInfoDocs() {

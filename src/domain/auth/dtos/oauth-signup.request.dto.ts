@@ -1,7 +1,15 @@
 import { BadRequestException } from '@nestjs/common';
 import { ApiProperty } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
-import { IsInt, IsString, Matches } from 'class-validator';
+import {
+  ArrayMaxSize,
+  ArrayMinSize,
+  IsArray,
+  IsInt,
+  IsNumber,
+  IsString,
+  Matches,
+} from 'class-validator';
 
 export class OAuthSignUpRequestDto {
   @ApiProperty({
@@ -61,4 +69,26 @@ export class OAuthSignUpRequestDto {
   })
   @IsInt()
   age: number;
+
+  @ApiProperty({
+    type: Number,
+    required: true,
+    example: '[1,2,3]',
+    description: '태그 pk 값',
+  })
+  @IsInt()
+  @Transform(({ value }) => {
+    if (!Array.isArray(value)) {
+      throw new BadRequestException('tag_pks feild is not array');
+    }
+    const distinct = [...new Set(value.map((v) => v))];
+    if (value.length != distinct.length) {
+      throw new BadRequestException('not allow duplicate vlaue');
+    }
+    return value;
+  })
+  @IsNumber({}, { each: true })
+  @ArrayMaxSize(3)
+  @ArrayMinSize(3)
+  tag_pks: number[];
 }

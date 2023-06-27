@@ -9,7 +9,7 @@ import {
 import { RefreshTokenGuard } from '../guard/refresh-token.guard';
 import { JwtAuthUser, User } from 'src/global/decorators/jwt.decorator';
 import { AuthService } from '../service/auth.service';
-import { RefreshRequestDto } from '../dto/refresh-request.dto';
+import { RefreshRequestDto } from '../dtos/refresh-request.dto';
 import { ResponseDto } from 'src/global/dtos/response.dto';
 import { AccessTokenGuard } from '../guard/access-token.guard';
 import { LogOutDocs, RefreshDocs } from 'docs/auth/auth.swagger';

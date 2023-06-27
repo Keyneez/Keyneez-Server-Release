@@ -2,9 +2,9 @@ import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
-import { OidcPublicKeyDto } from '../dto/oidc.public-key.dto';
+import { OidcPublicKeyDto } from '../dtos/oidc.public-key.dto';
 import { TokenService } from './token.service';
-import { OAuthUserTypeDto } from '../dto/oauth-user-type.dto';
+import { OAuthUserTypeDto } from '../dtos/oauth-user-type.dto';
 import oauthConfig from 'src/global/configs/oauth.config';
 import { ConfigType } from '@nestjs/config';
 
