@@ -40,12 +40,13 @@ export class OAuthSignUpRequestDto {
   @ApiProperty({
     type: String,
     required: true,
-    description: '성별, 여자는 F, 남자는 M으로 주세요',
+    description:
+      '성별, 여자는 F, 남자는 M,그외는 O 로 주세요, Female, Male, Other',
     example: 'M',
   })
   @IsString()
-  @Transform(({ value, obj }) => {
-    if (value === 'M' || value === 'F') {
+  @Transform(({ value }) => {
+    if (value === 'M' || value === 'F' || value === 'O') {
       return value;
     }
     throw new BadRequestException('성별 값을 확인해주세요!');
@@ -75,7 +76,6 @@ export class OAuthSignUpRequestDto {
     example: '[1,2,3]',
     description: '태그 pk 값',
   })
-  @IsInt()
   @Transform(({ value }) => {
     if (!Array.isArray(value)) {
       throw new BadRequestException('tag_pks feild is not array');
