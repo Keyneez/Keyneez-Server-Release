@@ -4,7 +4,6 @@ import { Transform } from 'class-transformer';
 import {
   ArrayMaxSize,
   ArrayMinSize,
-  IsArray,
   IsInt,
   IsNumber,
   IsString,
