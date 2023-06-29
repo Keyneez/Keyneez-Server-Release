@@ -3,13 +3,13 @@ import {
   ApiBadRequestResponse,
   ApiConflictResponse,
   ApiHeader,
-  ApiOkResponse,
   ApiOperation,
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { RefreshResponseDto } from 'src/domain/auth/dtos/refresh-response.dto';
 import { ResponseDto } from 'src/global/dtos/response.dto';
+import { ApiSuccessResponse } from '../api.success.response';
 
 export function LogOutDocs() {
   return applyDecorators(
@@ -26,8 +26,12 @@ export function LogOutDocs() {
       summary: '로그아웃',
       description: '로그아웃 요청',
     }),
-    ApiOkResponse({
-      description: '로그아웃 성공',
+    ApiSuccessResponse({
+      isArray: true,
+      exampleDesciption: '로그아웃 성공',
+      status: 200,
+      model: Array,
+      isNotValue: true,
     }),
     ApiBadRequestResponse({
       description: 'header에 토큰이 없는 경우 or token 값 자체가 이상한 경우',
@@ -55,9 +59,12 @@ export function RefreshDocs() {
         example: 'Authorization Bearer ${Access 토큰}',
       },
     }),
-    ApiOkResponse({
-      description: 'access 토큰 재 발급 성공',
-      type: RefreshResponseDto,
+    ApiSuccessResponse({
+      isArray: false,
+      exampleDesciption: 'access 토큰 재 발급 성공',
+      status: 200,
+      model: RefreshResponseDto,
+      isNotValue: false,
     }),
     ApiOperation({
       summary: 'refresh 요청',

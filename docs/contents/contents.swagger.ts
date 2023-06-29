@@ -3,7 +3,6 @@ import {
   ApiBadRequestResponse,
   ApiHeader,
   ApiNotFoundResponse,
-  ApiOkResponse,
   ApiOperation,
   ApiParam,
   ApiQuery,
@@ -14,6 +13,7 @@ import { ContentsDetailResponseDto } from 'src/domain/contents/dtos/contents-det
 import { ContentsResponseDto } from 'src/domain/contents/dtos/contents-response.dto';
 import { ResponseDto } from 'src/global/dtos/response.dto';
 import { ContentsLikedResponseDto } from 'src/domain/contents/dtos/contents-liked-response.dto';
+import { ApiSuccessResponse } from '../api.success.response';
 
 export function GetContentsDocs() {
   return applyDecorators(
@@ -29,7 +29,11 @@ export function GetContentsDocs() {
       description: '카테고리명 (취미 / 진로 / 활동)',
       required: false,
     }),
-    ApiOkResponse({ type: [ContentsResponseDto] }),
+    ApiSuccessResponse({
+      model: ContentsResponseDto,
+      isArray: true,
+      exampleDesciption: '게시글 전체 조회 성공',
+    }),
   );
 }
 
@@ -44,7 +48,11 @@ export function GetContentDetailDocs() {
       type: 'number',
       description: '게시물 id',
     }),
-    ApiOkResponse({ type: ContentsDetailResponseDto }),
+    ApiSuccessResponse({
+      model: ContentsDetailResponseDto,
+      isArray: false,
+      exampleDesciption: '게시글 상세 조회 성공',
+    }),
   );
 }
 
@@ -64,7 +72,11 @@ export function SearchByKeywordDocs() {
       description:
         "keyword가 포함된 게시물이 없을 때: 'Not found contents including keyword: ' + ${keyword}'",
     }),
-    ApiOkResponse({ type: [ContentsResponseDto] }),
+    ApiSuccessResponse({
+      model: ContentsResponseDto,
+      isArray: true,
+      exampleDesciption: '게시글 검색 성공',
+    }),
   );
 }
 
@@ -94,7 +106,11 @@ export function LikeContentDocs() {
         example: ResponseDto.fail(400, 'token이 필요합니다.'),
       },
     }),
-    ApiOkResponse({ type: ContentsLikedResponseDto }),
+    ApiSuccessResponse({
+      model: ContentsLikedResponseDto,
+      isArray: false,
+      exampleDesciption: '게시글 좋아요 성공',
+    }),
   );
 }
 
@@ -126,7 +142,12 @@ export function UnLikeContentDocs() {
         example: ResponseDto.fail(400, 'token이 필요합니다.'),
       },
     }),
-    ApiOkResponse(),
+    ApiSuccessResponse({
+      model: Array,
+      isArray: true,
+      exampleDesciption: '게시글 좋아요 취소 성공',
+      isNotValue: true,
+    }),
   );
 }
 
@@ -168,6 +189,10 @@ export function GetLikedContentsDocs() {
       description:
         '좋아요를 누른 게시물이 없는 경우: 좋아요를 누른 (${contentsRequestDto.filter}) 게시물이 없습니다',
     }),
-    ApiOkResponse({ type: [ContentsLikedResponseDto] }),
+    ApiSuccessResponse({
+      model: ContentsLikedResponseDto,
+      isArray: true,
+      exampleDesciption: '좋아요한 게시글 조회 성공',
+    }),
   );
 }

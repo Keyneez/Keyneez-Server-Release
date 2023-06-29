@@ -10,7 +10,7 @@ export class TagController {
   @Get('')
   @GetAllTagDocs()
   public async getTagAll() {
-    const reuslt = await this.tagService.getTags();
-    return ResponseDto.okWithData(HttpStatus.OK, '태그 조회 성공', reuslt);
+    const result = await this.tagService.getTags();
+    return ResponseDto.okWithData(HttpStatus.OK, '태그 조회 성공', result);
   }
 }
