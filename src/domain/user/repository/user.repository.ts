@@ -40,7 +40,6 @@ export class UserRepository {
   async create(
     oauthUser: OAuthUserTypeDto,
     nickname: string,
-    name: string,
     email: string,
     age: number,
     gender: string,
@@ -56,7 +55,6 @@ export class UserRepository {
       data: {
         sns_id: oauthUser.snsId,
         sns_type: oauthUser.snsType,
-        name,
         nickname,
         email,
         age,

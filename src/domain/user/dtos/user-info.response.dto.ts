@@ -11,12 +11,6 @@ export class UserInfoResponseDto {
 
   @ApiProperty({
     type: String,
-    description: 'user 이름, Oauth에서 받아오는 데이터',
-  })
-  readonly name: string;
-
-  @ApiProperty({
-    type: String,
     example: '닉네임',
     description: '닉네임',
   })
@@ -63,7 +57,6 @@ export class UserInfoResponseDto {
 
   constructor(user: Users) {
     this.user_pk = user.user_pk;
-    this.name = user.name;
     this.nickname = user.nickname;
     this.email = user.email;
     this.gender = user.gender;
