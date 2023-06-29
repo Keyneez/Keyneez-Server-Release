@@ -9,6 +9,7 @@ import {
   UseGuards,
   Post,
   HttpStatus,
+  BadRequestException,
 } from '@nestjs/common';
 import { ContentsService } from 'src/domain/contents/service/contents.service';
 import {
@@ -64,14 +65,14 @@ export class ContentsController {
     @User() user: JwtAuthUser,
     @Query() contentsRequestDto: GetContentsRequestDto,
   ): Promise<ResponseDto<ContentsLikedResponseDto[]>> {
-    const reuslt = await this.contentsService.getLikedContents(
+    const result = await this.contentsService.getLikedContents(
       user.userPk,
       contentsRequestDto,
     );
     return ResponseDto.okWithData(
       HttpStatus.OK,
       '좋아요 콘텐츠 조회 성공',
-      reuslt,
+      result,
     );
   }
 
@@ -107,11 +108,14 @@ export class ContentsController {
     @User() user: JwtAuthUser,
     @Param('pk') pk: string,
   ): Promise<ResponseDto<[]>> {
-    //! number type에 대한 검증 필요
-    //! validation 시 복잡하면 BODY로 넘기기
-    const contents = pk.split(',').map(Number);
+    const contents = pk.split(',');
+    const isNumeric = contents.every((item) => /^\d+$/.test(item));
 
-    await this.contentsService.unlikeContent(user.userPk, contents);
+    if (!isNumeric) {
+      throw new BadRequestException(`Invalid parameter : ${pk}`);
+    }
+
+    await this.contentsService.unlikeContent(user.userPk, contents.map(Number));
     return ResponseDto.ok(HttpStatus.OK, '좋아요 취소 성공');
   }
 }

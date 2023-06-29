@@ -142,6 +142,10 @@ export function UnLikeContentDocs() {
         example: ResponseDto.fail(400, 'token이 필요합니다.'),
       },
     }),
+    ApiBadRequestResponse({
+      description:
+        'parameter에 number가 아닌 값이 포함된 경우 ex) 1,2,hi,3 : `Invalid parameter : ${pk}`',
+    }),
     ApiSuccessResponse({
       model: Array,
       isArray: true,
