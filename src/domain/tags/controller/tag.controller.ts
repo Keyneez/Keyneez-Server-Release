@@ -1,6 +1,7 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, HttpStatus } from '@nestjs/common';
 import { TagService } from '../service/tag.service';
 import { GetAllTagDocs } from '../../../../docs/tag/tag.swagger';
+import { ResponseDto } from '../../../global/dtos/response.dto';
 
 @Controller('/api/tag')
 export class TagController {
@@ -9,6 +10,7 @@ export class TagController {
   @Get('')
   @GetAllTagDocs()
   public async getTagAll() {
-    return await this.tagService.getTags();
+    const reuslt = await this.tagService.getTags();
+    return ResponseDto.okWithData(HttpStatus.OK, '태그 조회 성공', reuslt);
   }
 }
