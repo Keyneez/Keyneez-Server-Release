@@ -34,7 +34,7 @@ export class OAuthSignUpRequestDto {
     description: '영어,한글,숫자만 가능한 2-6글자 ',
   })
   @IsString()
-  @Matches(/^[a-z가-힣0-9]{2,6}$/, { message: '닉네임 값을 확인해주세요' })
+  @Matches(/^[a-zA-Z가-힣0-9]{2,6}$/, { message: '닉네임 값을 확인해주세요' })
   nickname: string;
 
   @ApiProperty({
