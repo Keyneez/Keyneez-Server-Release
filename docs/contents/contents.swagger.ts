@@ -23,6 +23,26 @@ export function GetContentsDocs() {
       description:
         'Query가 들어오지 않을 시 전체를 조회하며, filter 이름의 쿼리 스트링이 들어올 시 카테고리가 일치하는 게시물만 조회됩니다',
     }),
+    ApiHeader({
+      name: 'Authorization',
+      description:
+        "access token이 필요합니다 key : Authorization, value : 'Bearer ${Token}'",
+      schema: {
+        example: 'Authorization Bearer ${Access 토큰}',
+      },
+    }),
+    ApiUnauthorizedResponse({
+      description: 'access 토큰이 만료된 경우',
+      schema: {
+        example: ResponseDto.fail(401, '만료된 token.'),
+      },
+    }),
+    ApiBadRequestResponse({
+      description: 'header에 토큰이 없는 경우 or token 값 자체가 이상한 경우',
+      schema: {
+        example: ResponseDto.fail(400, 'token이 필요합니다.'),
+      },
+    }),
     ApiQuery({
       name: 'filter',
       type: 'string',
@@ -43,10 +63,30 @@ export function GetContentDetailDocs() {
     ApiOperation({
       summary: '게시물 상세조회 API 입니다.',
     }),
+    ApiHeader({
+      name: 'Authorization',
+      description:
+        "access token이 필요합니다 key : Authorization, value : 'Bearer ${Token}'",
+      schema: {
+        example: 'Authorization Bearer ${Access 토큰}',
+      },
+    }),
+    ApiUnauthorizedResponse({
+      description: 'access 토큰이 만료된 경우',
+      schema: {
+        example: ResponseDto.fail(401, '만료된 token.'),
+      },
+    }),
+    ApiBadRequestResponse({
+      description: 'header에 토큰이 없는 경우 or token 값 자체가 이상한 경우',
+      schema: {
+        example: ResponseDto.fail(400, 'token이 필요합니다.'),
+      },
+    }),
     ApiParam({
-      name: 'id',
+      name: 'pk',
       type: 'number',
-      description: '게시물 id',
+      description: '게시물 pk',
     }),
     ApiSuccessResponse({
       model: ContentsDetailResponseDto,
@@ -61,6 +101,26 @@ export function SearchByKeywordDocs() {
     ApiTags('Contents'),
     ApiOperation({
       summary: '게시물 검색 API 입니다',
+    }),
+    ApiHeader({
+      name: 'Authorization',
+      description:
+        "access token이 필요합니다 key : Authorization, value : 'Bearer ${Token}'",
+      schema: {
+        example: 'Authorization Bearer ${Access 토큰}',
+      },
+    }),
+    ApiUnauthorizedResponse({
+      description: 'access 토큰이 만료된 경우',
+      schema: {
+        example: ResponseDto.fail(401, '만료된 token.'),
+      },
+    }),
+    ApiBadRequestResponse({
+      description: 'header에 토큰이 없는 경우 or token 값 자체가 이상한 경우',
+      schema: {
+        example: ResponseDto.fail(400, 'token이 필요합니다.'),
+      },
     }),
     ApiQuery({
       name: 'keyword',
@@ -106,6 +166,11 @@ export function LikeContentDocs() {
         example: ResponseDto.fail(400, 'token이 필요합니다.'),
       },
     }),
+    ApiParam({
+      name: 'pk',
+      type: 'number',
+      description: '게시물 pk',
+    }),
     ApiSuccessResponse({
       model: ContentsLikedResponseDto,
       isArray: false,
@@ -145,6 +210,11 @@ export function UnLikeContentDocs() {
     ApiBadRequestResponse({
       description:
         'parameter에 number가 아닌 값이 포함된 경우 ex) 1,2,hi,3 : `Invalid parameter : ${pk}`',
+    }),
+    ApiParam({
+      name: 'pk',
+      type: 'number[]',
+      description: '게시물 pk 리스트 or 게시물 pk : ex. 1,2,3 or 4',
     }),
     ApiSuccessResponse({
       model: Array,

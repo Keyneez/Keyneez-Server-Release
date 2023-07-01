@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNumber } from 'class-validator';
+import { Like } from './contents-response.dto';
 
 export class ContentsDetailResponseDto {
   @ApiProperty({
@@ -107,4 +108,11 @@ export class ContentsDetailResponseDto {
     description: '수정 일자',
   })
   readonly updated_at: Date;
+
+  @ApiProperty({
+    type: [Like],
+    nullable: false,
+    description: '좋아요 정보(없을 경우 빈 리스트)',
+  })
+  readonly Likes: Like[];
 }
