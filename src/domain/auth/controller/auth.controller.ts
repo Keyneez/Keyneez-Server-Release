@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpStatus,
   Post,
@@ -35,5 +36,12 @@ export class AuthController {
   async logout(@User() user: JwtAuthUser) {
     await this.authService.logout(user.userPk);
     return ResponseDto.ok(HttpStatus.OK, '로그아웃 성공');
+  }
+
+  @Delete('/withdraw')
+  @UseGuards(AccessTokenGuard)
+  async withdraw(@User() user: JwtAuthUser) {
+    await this.authService.withdraw(user.userPk);
+    return ResponseDto.ok(HttpStatus.OK, '회원탈퇴 성공');
   }
 }

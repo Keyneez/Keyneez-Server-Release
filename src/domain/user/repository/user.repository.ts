@@ -70,4 +70,12 @@ export class UserRepository {
       },
     });
   }
+
+  async delete(tx, userPk: number) {
+    await tx.users.delete({
+      where: {
+        user_pk: userPk,
+      },
+    });
+  }
 }

@@ -77,8 +77,8 @@ model UserTags {
   user_tag_pk Int   @id @default(autoincrement())
   user_fk     Int
   tag_fk      Int
-  Tags        Tags  @relation(fields: [tag_fk], references: [tag_pk])
-  Users       Users @relation(fields: [user_fk], references: [user_pk])
+  Tags        Tags  @relation(fields: [tag_fk], references: [tag_pk], onDelete: Cascade)
+  Users       Users @relation(fields: [user_fk], references: [user_pk], onDelete: Cascade)
 
   @@unique([user_fk, tag_fk], name: "users_tags")
 }

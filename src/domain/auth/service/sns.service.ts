@@ -38,6 +38,7 @@ export class SnsService {
     );
 
     if (!this.validateOauthAgree(payload)) {
+      await this.unlinkKakao(payload.sub);
       throw new ConflictException('동의항목을 모두 동의해주세요');
     }
 
@@ -75,5 +76,18 @@ export class SnsService {
     }
     cachedKeys = await this.cacheManager.get(KAKAO_PUBLIC_KEY_CAHCE);
     return cachedKeys;
+  }
+
+  async unlinkKakao(snsId: string) {
+    const UNLINK_URL = `https://kapi.kakao.com/v1/user/unlink?target_id_type=user_id&target_id=${snsId}`;
+    await this.httpService.axiosRef.post(
+      UNLINK_URL,
+      {},
+      {
+        headers: {
+          Authorization: `KakaoAK ${this.config.kakaoAdminKey}`,
+        },
+      },
+    );
   }
 }
