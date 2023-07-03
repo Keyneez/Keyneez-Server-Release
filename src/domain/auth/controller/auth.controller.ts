@@ -13,7 +13,7 @@ import { AuthService } from '../service/auth.service';
 import { RefreshRequestDto } from '../dtos/refresh-request.dto';
 import { ResponseDto } from 'src/global/dtos/response.dto';
 import { AccessTokenGuard } from '../guard/access-token.guard';
-import { LogOutDocs, RefreshDocs } from 'docs/auth/auth.swagger';
+import { LogOutDocs, RefreshDocs, WithDrawDocs } from 'docs/auth/auth.swagger';
 
 @Controller('/api/auth')
 export class AuthController {
@@ -40,6 +40,7 @@ export class AuthController {
 
   @Delete('/withdraw')
   @UseGuards(AccessTokenGuard)
+  @WithDrawDocs()
   async withdraw(@User() user: JwtAuthUser) {
     await this.authService.withdraw(user.userPk);
     return ResponseDto.ok(HttpStatus.OK, '회원탈퇴 성공');
