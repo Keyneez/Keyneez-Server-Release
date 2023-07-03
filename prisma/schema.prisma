@@ -38,9 +38,9 @@ model Contents {
   created_at        DateTime          @default(now())
   updated_at        DateTime          @updatedAt
   category          String            @db.VarChar(30)
-  tag               String            @db.VarChar(30)
+  tag               String?           @db.VarChar(30)
   ContentCategories ContentCategories @relation(fields: [category], references: [category], onDelete: Cascade, map: "category_fk")
-  Tags              Tags              @relation(fields: [tag], references: [tag], onDelete: Cascade, map: "tag_fk")
+  Tags              Tags?             @relation(fields: [tag], references: [tag], onDelete: Cascade, map: "tag_fk")
   Likes             Likes[]
 }
 
