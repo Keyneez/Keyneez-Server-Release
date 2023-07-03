@@ -51,7 +51,7 @@ export class TokenService {
       complete: true,
       json: true,
     });
-    if (result['header'].kid == undefined) {
+    if (!result['header'] || result['header'].kid == undefined) {
       throw new BadRequestException('invalid tokens!!');
     }
     return result['header'].kid;
