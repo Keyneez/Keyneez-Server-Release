@@ -11,14 +11,22 @@ import { ContentsLikedResponseDto } from '../dtos/contents-liked-response.dto';
 export class ContentsRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  async findCategoryPk(filter: string): Promise<ContentCategories> {
-    const category = await this.prisma.contentCategories.findUnique({
-      where: {
-        category: filter,
-      },
-    });
+  async findCategoryName(pks: number[]) {
+    const categories = Promise.all(
+      pks.map(async (pk) => {
+        const category = await this.prisma.contentCategories.findUnique({
+          where: {
+            category_pk: pk,
+          },
+          select: {
+            category: true,
+          },
+        });
+        return category.category;
+      }),
+    );
 
-    return category;
+    return categories;
   }
 
   async getFilteredContents(
@@ -217,4 +225,25 @@ export class ContentsRepository {
 
     return result;
   }
+
+  async getUserTags(user: number) {
+    const tags = await this.prisma.userTags.findMany({
+      where: {
+        user_fk: user,
+      },
+      include: {
+        Tags: {
+          select: {
+            category_fk: true,
+          },
+        },
+      },
+    });
+
+    const result = tags.map((tag) => tag.Tags.category_fk);
+
+    return result;
+  }
+
+  async recommendContents(categories: {}) {}
 }

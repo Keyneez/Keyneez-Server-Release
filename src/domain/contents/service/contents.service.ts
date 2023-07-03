@@ -70,6 +70,26 @@ export class ContentsService {
     return contents;
   }
 
+  async recommendContents(user: number) {
+    const categories = await this.contentsRepository.getUserTags(user);
+    const categoryNames = await this.contentsRepository.findCategoryName(
+      categories,
+    );
+
+    const category = {};
+
+    categoryNames.forEach((categoryName) => {
+      if (category[categoryName]) {
+        category[categoryName] += 1;
+      } else {
+        category[categoryName] = 1;
+      }
+    });
+
+    const contents = await this.contentsRepository.recommendContents(category);
+    // return contents;
+  }
+
   async getContentDetail(
     user: number,
     pk: number,
