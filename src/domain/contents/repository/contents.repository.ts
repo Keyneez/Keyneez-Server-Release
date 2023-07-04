@@ -270,7 +270,7 @@ export class ContentsRepository {
           orderBy: {
             created_at: 'desc',
           },
-          take: 5,
+          take: 3,
         });
         const result = content.map((contents) => contents.Contents);
         return result;

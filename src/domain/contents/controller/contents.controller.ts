@@ -17,6 +17,7 @@ import {
   GetContentsDocs,
   GetLikedContentsDocs,
   LikeContentDocs,
+  RecommendContentsDocs,
   SearchByKeywordDocs,
   UnLikeContentDocs,
 } from 'docs/contents/contents.swagger';
@@ -78,7 +79,10 @@ export class ContentsController {
 
   @Get('/recommend')
   @UseGuards(AccessTokenGuard)
-  async recommend(@User() user: JwtAuthUser) {
+  @RecommendContentsDocs()
+  async recommend(
+    @User() user: JwtAuthUser,
+  ): Promise<ResponseDto<ContentsResponseDto[]>> {
     const result = await this.contentsService.recommendContents(user.userPk);
     return ResponseDto.okWithData(
       HttpStatus.OK,

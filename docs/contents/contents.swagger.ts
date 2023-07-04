@@ -140,6 +140,46 @@ export function SearchByKeywordDocs() {
   );
 }
 
+export function RecommendContentsDocs() {
+  return applyDecorators(
+    ApiTags('Contents'),
+    ApiOperation({
+      summary: '추천 게시물 조회 API 입니다',
+    }),
+    ApiHeader({
+      name: 'Authorization',
+      description:
+        "access token이 필요합니다 key : Authorization, value : 'Bearer ${Token}'",
+      schema: {
+        example: 'Authorization Bearer ${Access 토큰}',
+      },
+    }),
+    ApiUnauthorizedResponse({
+      description: 'access 토큰이 만료된 경우',
+      schema: {
+        example: ResponseDto.fail(401, '만료된 token.'),
+      },
+    }),
+    ApiBadRequestResponse({
+      description: 'header에 토큰이 없는 경우 or token 값 자체가 이상한 경우',
+      schema: {
+        example: ResponseDto.fail(400, 'token이 필요합니다.'),
+      },
+    }),
+    ApiQuery({
+      name: 'keyword',
+      type: 'string',
+      description: '검색 키워드',
+      required: true,
+    }),
+    ApiSuccessResponse({
+      model: ContentsResponseDto,
+      isArray: true,
+      exampleDesciption: '추천 게시물 조회 성공',
+    }),
+  );
+}
+
 export function LikeContentDocs() {
   return applyDecorators(
     ApiTags('ContentLike'),
