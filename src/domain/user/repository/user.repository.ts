@@ -40,7 +40,6 @@ export class UserRepository {
   async create(
     oauthUser: OAuthUserTypeDto,
     nickname: string,
-    email: string,
     age: number,
     gender: string,
     birth: string,
@@ -51,10 +50,13 @@ export class UserRepository {
         tag_fk: tagPk,
       };
     });
+
+    const { snsId, snsType, email } = oauthUser;
+
     return await this.prisma.users.create({
       data: {
-        sns_id: oauthUser.snsId,
-        sns_type: oauthUser.snsType,
+        sns_id: snsId,
+        sns_type: snsType,
         nickname,
         email,
         age,
@@ -65,6 +67,14 @@ export class UserRepository {
             data: tags,
           },
         },
+      },
+    });
+  }
+
+  async delete(tx, userPk: number) {
+    await tx.users.delete({
+      where: {
+        user_pk: userPk,
       },
     });
   }

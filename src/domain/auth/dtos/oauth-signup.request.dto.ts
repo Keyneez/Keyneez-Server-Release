@@ -22,14 +22,6 @@ export class OAuthSignUpRequestDto {
   @ApiProperty({
     type: String,
     required: true,
-    description: 'oauth access Token',
-  })
-  @IsString()
-  access_token: string;
-
-  @ApiProperty({
-    type: String,
-    required: true,
     example: '닉네임',
     description: '영어,한글,숫자만 가능한 2-6글자 ',
   })

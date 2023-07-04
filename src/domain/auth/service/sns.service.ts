@@ -1,4 +1,9 @@
-import { BadRequestException, Inject, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  Inject,
+  Injectable,
+} from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
@@ -31,7 +36,17 @@ export class SnsService {
       KAKAO_ISSURE,
       PUBLICK_KEY,
     );
-    return new OAuthUserTypeDto('KAKAO', payload.sub);
+
+    if (!this.validateOauthAgree(payload)) {
+      await this.unlinkKakao(payload.sub);
+      throw new ConflictException('동의항목을 모두 동의해주세요');
+    }
+
+    return new OAuthUserTypeDto('KAKAO', payload.sub, payload.email);
+  }
+
+  private validateOauthAgree(payload): boolean {
+    return payload.email ? true : false;
   }
 
   private async getKakaoPublicKey(kid: string): Promise<OidcPublicKeyDto> {
@@ -63,13 +78,16 @@ export class SnsService {
     return cachedKeys;
   }
 
-  public async getKakaoUserInfo(accessToken: string) {
-    const KAKAO_USER_IFNO_URL = 'https://kapi.kakao.com/v1/oidc/userinfo';
-    const response = await this.httpService.axiosRef.get(KAKAO_USER_IFNO_URL, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
+  async unlinkKakao(snsId: string) {
+    const UNLINK_URL = `https://kapi.kakao.com/v1/user/unlink?target_id_type=user_id&target_id=${snsId}`;
+    await this.httpService.axiosRef.post(
+      UNLINK_URL,
+      {},
+      {
+        headers: {
+          Authorization: `KakaoAK ${this.config.kakaoAdminKey}`,
+        },
       },
-    });
-    return response.data;
+    );
   }
 }

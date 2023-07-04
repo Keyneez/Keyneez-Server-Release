@@ -37,7 +37,6 @@ export class OAuthService {
   async kakaoOauthSignup(dto: OAuthSignUpRequestDto) {
     const {
       id_token: idToken,
-      access_token: accessToken,
       nickname,
       age,
       birth,
@@ -50,14 +49,10 @@ export class OAuthService {
       throw new ConflictException('이미 가입된 유저입니다.');
     }
 
-    const userInfo = await this.snsService.getKakaoUserInfo(accessToken);
-
-    const email = userInfo.email;
     try {
       const user = await this.userRepository.create(
         oauthUser,
         nickname,
-        email,
         age,
         gender,
         birth,
