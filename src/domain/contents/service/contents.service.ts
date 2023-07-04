@@ -93,7 +93,7 @@ export class ContentsService {
     } else if (categoryCnt == 2) {
       const values = Object.values(category);
       if (values[0] == values[1]) {
-        const randomIdx = parseInt((Math.random() > 0.5).toString());
+        const randomIdx = Math.random() < 0.5 ? 0 : 1;
         category[Object.keys(category)[randomIdx]] = 2;
       }
     }
