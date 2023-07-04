@@ -71,11 +71,7 @@ export class ContentsService {
   }
 
   async recommendContents(user: number): Promise<ContentsResponseDto[]> {
-    const categories = await this.contentsRepository.getUserTags(user);
-    //* 카테고리 이름 받아오기
-    const categoryNames = await this.contentsRepository.findCategoryName(
-      categories,
-    );
+    const categoryNames = await this.contentsRepository.getUserTags(user);
 
     const category = {};
 
