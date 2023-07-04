@@ -70,9 +70,7 @@ export class ContentsService {
     return contents;
   }
 
-  async recommendContents(user: number): Promise<ContentsResponseDto[]> {
-    const categoryNames = await this.contentsRepository.getUserTags(user);
-
+  private categoryCount(categoryNames: string[]) {
     const category = {};
 
     //* 각 카테고리의 개수를 세어 객체 형태로 저장
@@ -97,6 +95,13 @@ export class ContentsService {
         category[Object.keys(category)[randomIdx]] = 2;
       }
     }
+
+    return category;
+  }
+
+  async recommendContents(user: number): Promise<ContentsResponseDto[]> {
+    const categoryNames = await this.contentsRepository.getUserTags(user);
+    const category = this.categoryCount(categoryNames);
 
     //* 가져와야할 게시물의 개수대로 랜덤하게 (카테고리별 최근 3개의 게시물 중에) 가져오기
     const contents = await this.contentsRepository.recommendContents(category);
