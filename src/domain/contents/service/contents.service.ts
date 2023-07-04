@@ -100,7 +100,15 @@ export class ContentsService {
 
     const contents = await this.contentsRepository.recommendContents(category);
 
-    return contents;
+    const result = [];
+
+    for (const sublist of contents) {
+      for (const obj of sublist) {
+        result.push(obj);
+      }
+    }
+
+    return result;
   }
 
   async getContentDetail(
