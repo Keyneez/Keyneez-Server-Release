@@ -86,8 +86,21 @@ export class ContentsService {
       }
     });
 
+    const categoryCnt = Object.keys(category).length;
+
+    if (categoryCnt == 1) {
+      category[Object.keys(category)[0]] = 3;
+    } else if (categoryCnt == 2) {
+      const values = Object.values(category);
+      if (values[0] == values[1]) {
+        const randomIdx = parseInt((Math.random() > 0.5).toString());
+        category[Object.keys(category)[randomIdx]] = 2;
+      }
+    }
+
     const contents = await this.contentsRepository.recommendContents(category);
-    // return contents;
+
+    return contents;
   }
 
   async getContentDetail(

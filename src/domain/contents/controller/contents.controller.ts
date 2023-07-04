@@ -80,6 +80,11 @@ export class ContentsController {
   @UseGuards(AccessTokenGuard)
   async recommend(@User() user: JwtAuthUser) {
     const result = await this.contentsService.recommendContents(user.userPk);
+    return ResponseDto.okWithData(
+      HttpStatus.OK,
+      '추천 게시물 조회 성공',
+      result,
+    );
   }
 
   @Get('/:pk')

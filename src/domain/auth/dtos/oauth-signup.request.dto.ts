@@ -88,6 +88,6 @@ export class OAuthSignUpRequestDto {
   })
   @IsNumber({}, { each: true })
   @ArrayMaxSize(3)
-  @ArrayMinSize(3)
+  @ArrayMinSize(1)
   tag_pks: number[];
 }
