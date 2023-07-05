@@ -11,7 +11,7 @@ import { ContentsDetailResponseDto } from 'src/domain/contents/dtos/contents-det
 import { ContentsResponseDto } from 'src/domain/contents/dtos/contents-response.dto';
 import { ContentsLikedResponseDto } from 'src/domain/contents/dtos/contents-liked-response.dto';
 import { ApiSuccessResponse } from '../api.success.response';
-import { RequireAccessToken } from 'docs/require.access-token';
+import { RequireAccessToken } from '../require.access-token';
 
 export function GetContentsDocs() {
   return applyDecorators(
