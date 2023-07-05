@@ -17,6 +17,7 @@ import {
   GetContentsDocs,
   GetLikedContentsDocs,
   LikeContentDocs,
+  RecommendContentsDocs,
   SearchByKeywordDocs,
   UnLikeContentDocs,
 } from 'docs/contents/contents.swagger';
@@ -41,7 +42,7 @@ export class ContentsController {
       user.userPk,
       contentsRequestDto,
     );
-    return ResponseDto.okWithData(HttpStatus.OK, '콘텐츠 조회 성공', result);
+    return ResponseDto.okWithData(HttpStatus.OK, '게시물 조회 성공', result);
   }
 
   @Get('/search')
@@ -55,7 +56,7 @@ export class ContentsController {
       user.userPk,
       keyword,
     );
-    return ResponseDto.okWithData(HttpStatus.OK, '콘텐츠 검색 성공', result);
+    return ResponseDto.okWithData(HttpStatus.OK, '게시물 검색 성공', result);
   }
 
   @Get('/liked')
@@ -71,7 +72,21 @@ export class ContentsController {
     );
     return ResponseDto.okWithData(
       HttpStatus.OK,
-      '좋아요 콘텐츠 조회 성공',
+      '좋아요 게시물 조회 성공',
+      result,
+    );
+  }
+
+  @Get('/recommend')
+  @UseGuards(AccessTokenGuard)
+  @RecommendContentsDocs()
+  async recommend(
+    @User() user: JwtAuthUser,
+  ): Promise<ResponseDto<ContentsResponseDto[]>> {
+    const result = await this.contentsService.recommendContents(user.userPk);
+    return ResponseDto.okWithData(
+      HttpStatus.OK,
+      '추천 게시물 조회 성공',
       result,
     );
   }

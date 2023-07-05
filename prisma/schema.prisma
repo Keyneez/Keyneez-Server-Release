@@ -24,24 +24,32 @@ model Tags {
 }
 
 model Contents {
-  content_pk        Int               @id @unique @default(autoincrement())
-  title             String            @db.VarChar(30)
-  link              String            @db.VarChar(100)
-  img               String            @db.VarChar(100)
-  place             String            @db.VarChar(30)
-  introduction      String            @db.VarChar(200)
-  start_at          String?           @db.VarChar(10)
-  end_at            String?           @db.VarChar(10)
+  content_pk        Int                 @id @unique @default(autoincrement())
+  title             String              @db.VarChar(30)
+  link              String              @db.VarChar(100)
+  img               String              @db.VarChar(100)
+  place             String              @db.VarChar(30)
+  introduction      String              @db.VarChar(200)
+  start_at          String?             @db.VarChar(10)
+  end_at            String?             @db.VarChar(10)
   inquiry           String[]
   price             String[]
   benefit           String[]
-  created_at        DateTime          @default(now())
-  updated_at        DateTime          @updatedAt
-  category          String            @db.VarChar(30)
-  tag               String            @db.VarChar(30)
-  ContentCategories ContentCategories @relation(fields: [category], references: [category], onDelete: Cascade, map: "category_fk")
-  Tags              Tags              @relation(fields: [tag], references: [tag], onDelete: Cascade, map: "tag_fk")
+  created_at        DateTime            @default(now())
+  updated_at        DateTime            @updatedAt
+  category          String              @db.VarChar(30)
+  tag               String?             @db.VarChar(30)
+  ContentCategories ContentCategories   @relation(fields: [category], references: [category], onDelete: Cascade, map: "category_fk")
+  Tags              Tags?               @relation(fields: [tag], references: [tag], onDelete: Cascade, map: "tag_fk")
   Likes             Likes[]
+  RecommendContents RecommendContents[]
+}
+
+model RecommendContents {
+  recomment_pk Int      @id @unique @default(autoincrement())
+  content      Int
+  created_at   DateTime @default(now())
+  Contents     Contents @relation(fields: [content], references: [content_pk], onDelete: Cascade, map: "content_fk")
 }
 
 model Likes {

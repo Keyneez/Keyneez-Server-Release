@@ -11,16 +11,6 @@ import { ContentsLikedResponseDto } from '../dtos/contents-liked-response.dto';
 export class ContentsRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  async findCategoryPk(filter: string): Promise<ContentCategories> {
-    const category = await this.prisma.contentCategories.findUnique({
-      where: {
-        category: filter,
-      },
-    });
-
-    return category;
-  }
-
   async getFilteredContents(
     user: number,
     filter: CategoryFilter,
@@ -216,5 +206,69 @@ export class ContentsRepository {
     });
 
     return result;
+  }
+
+  async getUserTags(user: number) {
+    const tags = await this.prisma.userTags.findMany({
+      where: {
+        user_fk: user,
+      },
+      include: {
+        Tags: {
+          select: {
+            ContentCategories: {
+              select: {
+                category: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    const result = tags.map((tag) => tag.Tags.ContentCategories.category);
+
+    return result;
+  }
+
+  async recommendContents(categories: {}) {
+    const filters = Object.keys(categories);
+    const contents = Promise.all(
+      filters.map(async (filter) => {
+        const content = await this.prisma.recommendContents.findMany({
+          where: {
+            Contents: {
+              category: filter,
+            },
+          },
+          select: {
+            Contents: {
+              select: {
+                content_pk: true,
+                title: true,
+                category: true,
+                img: true,
+                start_at: true,
+                end_at: true,
+              },
+            },
+          },
+          orderBy: {
+            created_at: 'desc',
+          },
+          take: 3,
+        });
+        const result = content.map((contents) => contents.Contents);
+        return result;
+      }),
+    );
+
+    const randomContents = (await contents).map((content) => {
+      const shuffle = content.sort(() => 0.5 - Math.random());
+      const random = shuffle.slice(0, categories[content[0].category]);
+      return random;
+    });
+
+    return randomContents;
   }
 }

@@ -70,6 +70,54 @@ export class ContentsService {
     return contents;
   }
 
+  private categoryCount(categoryNames: string[]) {
+    const category = {};
+
+    //* 각 카테고리의 개수를 세어 객체 형태로 저장
+    categoryNames.forEach((categoryName) => {
+      if (category[categoryName]) {
+        category[categoryName] += 1;
+      } else {
+        category[categoryName] = 1;
+      }
+    });
+
+    //* 카테고리의 종류 개수
+    const categoryCnt = Object.keys(category).length;
+
+    //* 기획 알고리즘에 맞추어 category 객체를 '카테고리':가져와야할 게시물의 수 로 조정
+    if (categoryCnt == 1) {
+      category[Object.keys(category)[0]] = 3;
+    } else if (categoryCnt == 2) {
+      const values = Object.values(category);
+      if (values[0] == values[1]) {
+        const randomIdx = Math.random() < 0.5 ? 0 : 1;
+        category[Object.keys(category)[randomIdx]] = 2;
+      }
+    }
+
+    return category;
+  }
+
+  async recommendContents(user: number): Promise<ContentsResponseDto[]> {
+    const categoryNames = await this.contentsRepository.getUserTags(user);
+    const category = this.categoryCount(categoryNames);
+
+    //* 가져와야할 게시물의 개수대로 랜덤하게 (카테고리별 최근 3개의 게시물 중에) 가져오기
+    const contents = await this.contentsRepository.recommendContents(category);
+
+    const result = [];
+
+    //* 이중 리스트 구조 -> 단일 리스트로 변환
+    for (const sublist of contents) {
+      for (const obj of sublist) {
+        result.push(obj);
+      }
+    }
+
+    return result;
+  }
+
   async getContentDetail(
     user: number,
     pk: number,

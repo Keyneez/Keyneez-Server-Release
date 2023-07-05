@@ -154,3 +154,24 @@ export function GetLikedContentsDocs() {
     }),
   );
 }
+
+export function RecommendContentsDocs() {
+  return applyDecorators(
+    ApiTags('Contents'),
+    ApiOperation({
+      summary: '추천 게시물 조회 API 입니다',
+    }),
+    RequireAccessToken(),
+    ApiQuery({
+      name: 'keyword',
+      type: 'string',
+      description: '검색 키워드',
+      required: true,
+    }),
+    ApiSuccessResponse({
+      model: ContentsResponseDto,
+      isArray: true,
+      exampleDesciption: '추천 게시물 조회 성공',
+    }),
+  );
+}

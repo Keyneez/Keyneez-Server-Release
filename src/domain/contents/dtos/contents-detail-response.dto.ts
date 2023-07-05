@@ -27,7 +27,7 @@ export class ContentsDetailResponseDto {
 
   @ApiProperty({
     type: String,
-    nullable: false,
+    nullable: true,
     description: '게시물 태그',
   })
   readonly tag: string;
