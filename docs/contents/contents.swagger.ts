@@ -19,7 +19,7 @@ export function GetContentsDocs() {
     ApiOperation({
       summary: '게시물 전체조회 / 필터별 조회 API 입니다',
       description:
-        'Query가 들어오지 않을 시 전체를 조회하며, filter 이름의 쿼리 스트링이 들어올 시 카테고리가 일치하는 게시물만 조회됩니다',
+        'Query가 들어오지 않을 시 전체를 조회하며, filter 이름의 쿼리 스트링이 들어올 시 카테고리가 일치하는 게시물만 조회됩니다. 최근 업데이트 된 게시물 순서대로 정렬되어 조회됩니다.',
     }),
     RequireAccessToken(),
     ApiQuery({
