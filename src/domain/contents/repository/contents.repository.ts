@@ -1,6 +1,5 @@
 import { CategoryFilter } from './../dtos/contents-request.dto';
-import { Injectable, BadRequestException } from '@nestjs/common';
-import { ContentCategories } from '@prisma/client';
+import { Injectable } from '@nestjs/common';
 import { ContentsDetailResponseDto } from 'src/domain/contents/dtos/contents-detail-response.dto';
 import { PrismaService } from 'src/global/prisma/prima.service';
 import { ContentsResponseDto } from '../dtos/contents-response.dto';
@@ -32,6 +31,9 @@ export class ContentsRepository {
           },
         },
       },
+      orderBy: {
+        created_at: 'desc',
+      },
     });
 
     return contents;
@@ -51,6 +53,9 @@ export class ContentsRepository {
             user,
           },
         },
+      },
+      orderBy: {
+        created_at: 'desc',
       },
     });
   }
