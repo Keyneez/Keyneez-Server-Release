@@ -1,6 +1,5 @@
 import { LikeResponseDTO } from '../dtos/like-response.dto';
 import { GetContentsRequestDto } from '../dtos/contents-request.dto';
-import { ContentsDetailResponseDto } from '../dtos/contents-detail-response.dto';
 import {
   Controller,
   Get,
@@ -21,11 +20,11 @@ import {
   SearchByKeywordDocs,
   UnLikeContentDocs,
 } from 'docs/contents/contents.swagger';
-import { ContentsResponseDto } from '../dtos/contents-response.dto';
 import { AccessTokenGuard } from 'src/domain/auth/guard/access-token.guard';
 import { JwtAuthUser, User } from 'src/global/decorators/jwt.decorator';
 import { ContentsLikedResponseDto } from '../dtos/contents-liked-response.dto';
 import { ResponseDto } from '../../../global/dtos/response.dto';
+import { ContentsDetailResponseDto } from '../dtos/contents-detail-response.dto';
 
 @Controller('api/contents')
 export class ContentsController {
@@ -37,7 +36,7 @@ export class ContentsController {
   async getContents(
     @User() user: JwtAuthUser,
     @Query() contentsRequestDto: GetContentsRequestDto,
-  ): Promise<ResponseDto<ContentsResponseDto[]>> {
+  ): Promise<ResponseDto<ContentsDetailResponseDto[]>> {
     const result = await this.contentsService.getContents(
       user.userPk,
       contentsRequestDto,
@@ -51,7 +50,7 @@ export class ContentsController {
   async searchByKeyword(
     @User() user: JwtAuthUser,
     @Query('keyword') keyword: string,
-  ): Promise<ResponseDto<ContentsResponseDto[]>> {
+  ): Promise<ResponseDto<ContentsDetailResponseDto[]>> {
     const result = await this.contentsService.searchByKeyword(
       user.userPk,
       keyword,
@@ -82,7 +81,7 @@ export class ContentsController {
   @RecommendContentsDocs()
   async recommend(
     @User() user: JwtAuthUser,
-  ): Promise<ResponseDto<ContentsResponseDto[]>> {
+  ): Promise<ResponseDto<ContentsDetailResponseDto[]>> {
     const result = await this.contentsService.recommendContents(user.userPk);
     return ResponseDto.okWithData(
       HttpStatus.OK,

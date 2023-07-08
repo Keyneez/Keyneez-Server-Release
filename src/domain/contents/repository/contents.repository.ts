@@ -1,30 +1,21 @@
 import { CategoryFilter } from './../dtos/contents-request.dto';
 import { Injectable } from '@nestjs/common';
-import { ContentsDetailResponseDto } from 'src/domain/contents/dtos/contents-detail-response.dto';
 import { PrismaService } from 'src/global/prisma/prima.service';
-import { ContentsResponseDto } from '../dtos/contents-response.dto';
 import { LikeResponseDTO } from '../dtos/like-response.dto';
-import { ContentsLikedResponseDto } from '../dtos/contents-liked-response.dto';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class ContentsRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  async getFilteredContents(
-    user: number,
-    filter: CategoryFilter,
-  ): Promise<ContentsResponseDto[]> {
+  async getFilteredContents(user: number, filter: CategoryFilter) {
     const contents = await this.prisma.contents.findMany({
       where: {
         category: filter,
       },
-      select: {
-        content_pk: true,
-        title: true,
-        category: true,
-        img: true,
-        start_at: true,
-        end_at: true,
+      include: {
+        ContentCategories: true,
+        Tags: true,
         Likes: {
           where: {
             user,
@@ -39,15 +30,11 @@ export class ContentsRepository {
     return contents;
   }
 
-  async getAllContents(user: number): Promise<ContentsResponseDto[]> {
+  async getAllContents(user: number) {
     return await this.prisma.contents.findMany({
-      select: {
-        content_pk: true,
-        title: true,
-        category: true,
-        img: true,
-        start_at: true,
-        end_at: true,
+      include: {
+        ContentCategories: true,
+        Tags: true,
         Likes: {
           where: {
             user,
@@ -60,10 +47,7 @@ export class ContentsRepository {
     });
   }
 
-  async searchByKeyword(
-    user: number,
-    keyword: string,
-  ): Promise<ContentsResponseDto[]> {
+  async searchByKeyword(user: number, keyword: string) {
     const contents = await this.prisma.contents.findMany({
       where: {
         OR: [
@@ -84,13 +68,9 @@ export class ContentsRepository {
           },
         ],
       },
-      select: {
-        content_pk: true,
-        title: true,
-        category: true,
-        img: true,
-        start_at: true,
-        end_at: true,
+      include: {
+        ContentCategories: true,
+        Tags: true,
         Likes: {
           where: {
             user,
@@ -102,15 +82,14 @@ export class ContentsRepository {
     return contents;
   }
 
-  async getContentDetail(
-    user: number,
-    pk: number,
-  ): Promise<ContentsDetailResponseDto> {
+  async getContentDetail(user: number, pk: number) {
     const content = await this.prisma.contents.findUnique({
       where: {
         content_pk: pk,
       },
       include: {
+        ContentCategories: true,
+        Tags: true,
         Likes: {
           where: {
             user,
@@ -157,10 +136,7 @@ export class ContentsRepository {
     }
   }
 
-  async getFilteredLikedContents(
-    user: number,
-    filter: string,
-  ): Promise<ContentsLikedResponseDto[]> {
+  async getFilteredLikedContents(user: number, filter: string) {
     const contents = await this.prisma.likes.findMany({
       where: {
         user,
@@ -170,13 +146,9 @@ export class ContentsRepository {
       },
       select: {
         Contents: {
-          select: {
-            content_pk: true,
-            title: true,
-            category: true,
-            img: true,
-            start_at: true,
-            end_at: true,
+          include: {
+            ContentCategories: true,
+            Tags: true,
           },
         },
       },
@@ -187,20 +159,16 @@ export class ContentsRepository {
     return result;
   }
 
-  async getLikedContents(user: number): Promise<ContentsLikedResponseDto[]> {
+  async getLikedContents(user: number) {
     const contents = await this.prisma.likes.findMany({
       where: {
         user,
       },
       include: {
         Contents: {
-          select: {
-            content_pk: true,
-            title: true,
-            category: true,
-            img: true,
-            start_at: true,
-            end_at: true,
+          include: {
+            ContentCategories: true,
+            Tags: true,
           },
         },
       },
@@ -254,13 +222,17 @@ export class ContentsRepository {
               gte: dateString,
             },
           },
-          select: {
-            content_pk: true,
-            title: true,
-            category: true,
-            img: true,
-            start_at: true,
-            end_at: true,
+          include: {
+            ContentCategories: {
+              select: {
+                img: true,
+              },
+            },
+            Tags: {
+              select: {
+                img: true,
+              },
+            },
           },
           orderBy: {
             end_at: 'asc',
@@ -280,3 +252,22 @@ export class ContentsRepository {
     return randomContents;
   }
 }
+
+export type FilterTagLike = Prisma.ContentsGetPayload<{
+  include: {
+    ContentCategories: true;
+    Tags: true;
+    Likes: {
+      where: {
+        user: number;
+      };
+    };
+  };
+}>;
+
+export type FilterAndTag = Prisma.ContentsGetPayload<{
+  include: {
+    ContentCategories: true;
+    Tags: true;
+  };
+}>;

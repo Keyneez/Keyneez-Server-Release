@@ -1,14 +1,13 @@
 import { ContentsRepository } from '../repository/contents.repository';
 import { GetContentsRequestDto } from '../dtos/contents-request.dto';
-import { ContentsDetailResponseDto } from '../dtos/contents-detail-response.dto';
 import {
   Injectable,
   NotFoundException,
   BadRequestException,
 } from '@nestjs/common';
-import { ContentsResponseDto } from '../dtos/contents-response.dto';
 import { LikeResponseDTO } from '../dtos/like-response.dto';
 import { ContentsLikedResponseDto } from '../dtos/contents-liked-response.dto';
+import { ContentsDetailResponseDto } from '../dtos/contents-detail-response.dto';
 
 @Injectable()
 export class ContentsService {
@@ -20,16 +19,26 @@ export class ContentsService {
         user,
         contentsRequestDto.filter,
       );
-      return contents;
-    }
+      const result = contents.map((content) => {
+        const { ContentCategories, Likes, Tags, ...pureContent } = content;
+        return new ContentsDetailResponseDto(pureContent, content);
+      });
 
-    return await this.contentsRepository.getAllContents(user);
+      return result;
+    }
+    const contents = await this.contentsRepository.getAllContents(user);
+
+    const result = contents.map((content) => {
+      const { ContentCategories, Likes, Tags, ...pureContent } = content;
+      return new ContentsDetailResponseDto(pureContent, content);
+    });
+    return result;
   }
 
   async searchByKeyword(
     user: number,
     keyword: string,
-  ): Promise<ContentsResponseDto[]> {
+  ): Promise<ContentsDetailResponseDto[]> {
     const contents = await this.contentsRepository.searchByKeyword(
       user,
       keyword,
@@ -39,7 +48,13 @@ export class ContentsService {
         'Not found contents including keyword: ' + keyword,
       );
     }
-    return contents;
+
+    const result = contents.map((content) => {
+      const { ContentCategories, Likes, Tags, ...pureContent } = content;
+      return new ContentsDetailResponseDto(pureContent, content);
+    });
+
+    return result;
   }
 
   async getLikedContents(
@@ -58,7 +73,12 @@ export class ContentsService {
         );
       }
 
-      return contents;
+      const result = contents.map((content) => {
+        const { ContentCategories, Tags, ...pureContent } = content;
+        return new ContentsLikedResponseDto(pureContent, content);
+      });
+
+      return result;
     }
 
     const contents = await this.contentsRepository.getLikedContents(user);
@@ -67,7 +87,12 @@ export class ContentsService {
       throw new NotFoundException(`좋아요를 누른 게시물이 없습니다`);
     }
 
-    return contents;
+    const result = contents.map((content) => {
+      const { ContentCategories, Tags, ...pureContent } = content;
+      return new ContentsLikedResponseDto(pureContent, content);
+    });
+
+    return result;
   }
 
   private categoryCount(categoryNames: string[]) {
@@ -99,21 +124,26 @@ export class ContentsService {
     return category;
   }
 
-  async recommendContents(user: number): Promise<ContentsResponseDto[]> {
+  async recommendContents(user: number): Promise<ContentsDetailResponseDto[]> {
     const categoryNames = await this.contentsRepository.getUserTags(user);
     const category = this.categoryCount(categoryNames);
 
     //* 가져와야할 게시물의 개수대로 랜덤하게 (카테고리별 최근 3개의 게시물 중에) 가져오기
     const contents = await this.contentsRepository.recommendContents(category);
 
-    const result = [];
+    const temp_result = [];
 
     //* 이중 리스트 구조 -> 단일 리스트로 변환
     for (const sublist of contents) {
       for (const obj of sublist) {
-        result.push(obj);
+        temp_result.push(obj);
       }
     }
+
+    const result = temp_result.map((content) => {
+      const { ContentCategories, Likes, Tags, ...pureContent } = content;
+      return new ContentsDetailResponseDto(pureContent, content);
+    });
 
     return result;
   }
@@ -123,8 +153,9 @@ export class ContentsService {
     pk: number,
   ): Promise<ContentsDetailResponseDto> {
     const content = await this.contentsRepository.getContentDetail(user, pk);
+    const { ContentCategories, Likes, Tags, ...pureContent } = content;
 
-    return content;
+    return new ContentsDetailResponseDto(pureContent, content);
   }
 
   async likeContent(user: number, content: number): Promise<LikeResponseDTO> {
