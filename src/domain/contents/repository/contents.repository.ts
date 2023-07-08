@@ -238,33 +238,36 @@ export class ContentsRepository {
 
   async recommendContents(categories: {}) {
     const filters = Object.keys(categories);
+
+    const now = new Date();
+    const year = now.getFullYear().toString();
+    const month = (now.getMonth() + 1).toString().padStart(2, '0');
+    const day = now.getDate().toString().padStart(2, '0');
+    const dateString = `${year}.${month}.${day}`;
+
     const contents = Promise.all(
       filters.map(async (filter) => {
-        const content = await this.prisma.recommendContents.findMany({
+        const content = await this.prisma.contents.findMany({
           where: {
-            Contents: {
-              category: filter,
+            category: filter,
+            end_at: {
+              gte: dateString,
             },
           },
           select: {
-            Contents: {
-              select: {
-                content_pk: true,
-                title: true,
-                category: true,
-                img: true,
-                start_at: true,
-                end_at: true,
-              },
-            },
+            content_pk: true,
+            title: true,
+            category: true,
+            img: true,
+            start_at: true,
+            end_at: true,
           },
           orderBy: {
-            created_at: 'desc',
+            end_at: 'asc',
           },
-          take: 3,
+          take: 5,
         });
-        const result = content.map((contents) => contents.Contents);
-        return result;
+        return content;
       }),
     );
 
