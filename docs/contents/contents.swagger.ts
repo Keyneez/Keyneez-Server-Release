@@ -8,7 +8,6 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { ContentsDetailResponseDto } from 'src/domain/contents/dtos/contents-detail-response.dto';
-import { ContentsResponseDto } from 'src/domain/contents/dtos/contents-response.dto';
 import { ContentsLikedResponseDto } from 'src/domain/contents/dtos/contents-liked-response.dto';
 import { ApiSuccessResponse } from '../api.success.response';
 import { RequireAccessToken } from '../require.access-token';
@@ -29,7 +28,7 @@ export function GetContentsDocs() {
       required: false,
     }),
     ApiSuccessResponse({
-      model: ContentsResponseDto,
+      model: ContentsDetailResponseDto,
       isArray: true,
       exampleDesciption: '게시글 전체 조회 성공',
     }),
@@ -74,7 +73,7 @@ export function SearchByKeywordDocs() {
         "keyword가 포함된 게시물이 없을 때: 'Not found contents including keyword: ' + ${keyword}'",
     }),
     ApiSuccessResponse({
-      model: ContentsResponseDto,
+      model: ContentsDetailResponseDto,
       isArray: true,
       exampleDesciption: '게시글 검색 성공',
     }),
@@ -169,7 +168,7 @@ export function RecommendContentsDocs() {
       required: true,
     }),
     ApiSuccessResponse({
-      model: ContentsResponseDto,
+      model: ContentsDetailResponseDto,
       isArray: true,
       exampleDesciption: '추천 게시물 조회 성공',
     }),

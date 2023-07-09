@@ -1,5 +1,8 @@
+// import { FilterTagLike } from './../repository/contents.repository';
 import { ApiProperty } from '@nestjs/swagger';
+import { Contents } from '@prisma/client';
 import { IsNumber } from 'class-validator';
+import { FilterTagLike } from '../repository/contents.repository';
 import { Like } from './contents-response.dto';
 
 export class ContentsDetailResponseDto {
@@ -41,7 +44,7 @@ export class ContentsDetailResponseDto {
 
   @ApiProperty({
     type: String,
-    nullable: false,
+    nullable: true,
     description: '메인 이미지 주소',
   })
   readonly img: string;
@@ -115,4 +118,25 @@ export class ContentsDetailResponseDto {
     description: '좋아요 정보(없을 경우 빈 리스트)',
   })
   readonly Likes: Like[];
+
+  constructor(content: Contents, filter_tag_like: FilterTagLike) {
+    this.content_pk = content.content_pk;
+    this.title = content.title;
+    this.category = content.category;
+    this.tag = content.tag;
+    this.link = content.link;
+    this.place = content.place;
+    this.inquiry = content.inquiry;
+    this.introduction = content.introduction;
+    this.start_at = content.start_at;
+    this.end_at = content.end_at;
+    this.price = content.price;
+    this.benefit = content.benefit;
+    this.created_at = content.created_at;
+    this.updated_at = content.updated_at;
+    this.img = filter_tag_like.Tags
+      ? filter_tag_like.Tags.img
+      : filter_tag_like.ContentCategories.img;
+    this.Likes = filter_tag_like.Likes;
+  }
 }
